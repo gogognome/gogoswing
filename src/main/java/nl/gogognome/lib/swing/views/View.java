@@ -15,6 +15,8 @@ import nl.gogognome.lib.gui.beans.BeanFactory;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A view represents a rectangular area inside a dialog or frame. A view typically
@@ -37,6 +39,8 @@ import nl.gogognome.lib.util.Factory;
  * think about deinitializing them in your onClose() implementation.
  */
 public abstract class View extends JPanel implements Closeable {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static final long serialVersionUID = 1L;
 
@@ -134,6 +138,8 @@ public abstract class View extends JPanel implements Closeable {
      * Closes the view and notifies listeners.
      */
     void doClose() {
+        logger.debug("Closing view " + getClass().getName());
+
         onClose();
 
         for (Closeable d : closeables) {
@@ -148,6 +154,7 @@ public abstract class View extends JPanel implements Closeable {
 
 	/** Initializes the view. */
     void doInit() {
+        logger.debug("Initializing view " + getClass().getName());
         onInit();
     }
 

@@ -1,31 +1,24 @@
 package nl.gogognome.lib.swing;
 
-import static javax.swing.SwingConstants.BOTTOM;
-import static javax.swing.SwingConstants.CENTER;
-import static javax.swing.SwingConstants.HORIZONTAL;
-import static javax.swing.SwingConstants.LEFT;
-import static javax.swing.SwingConstants.RIGHT;
-import static javax.swing.SwingConstants.TOP;
-import static javax.swing.SwingConstants.VERTICAL;
-
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
+import nl.gogognome.lib.gui.Closeable;
+import nl.gogognome.lib.swing.action.Actions;
 import nl.gogognome.lib.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+
+import static javax.swing.SwingConstants.*;
 
 /**
  * This class implements a panel that can hold a number of buttons.
  * The buttons are shown in a single row or in a single column.
  * The location of the buttons within the panel is configurable.
  */
-public class ButtonPanel extends JPanel {
+public class ButtonPanel extends JPanel implements Closeable {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ButtonPanel.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -121,12 +114,25 @@ public class ButtonPanel extends JPanel {
     /**
      * Adds a button to this panel.
 	 * @param id the id of the button's description in the resources.
-	 * @param the action to be performed when the button is pressed
+	 * @param action the action to be performed when the button is pressed
 	 * @return the button.
      */
     public JButton addButton(String id, Action action) {
     	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
     	JButton button = wf.createButton(id, action);
+    	add(button);
+    	return button;
+    }
+
+    /**
+     * Adds a button to this panel.
+	 * @param id the id of the button's description in the resources.
+	 * @param runnable the runnable to be executed when the button is pressed
+	 * @return the button.
+     */
+    public JButton addButton(String id, RunnableWithException runnable) {
+    	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
+    	JButton button = wf.createButton(id, Actions.build(this, runnable));
     	add(button);
     	return button;
     }
@@ -173,4 +179,13 @@ public class ButtonPanel extends JPanel {
         return component;
     }
 
+    @Override
+    public void close() {
+        LOGGER.debug("Closing button panel");
+        for (Component c : getComponents()) {
+            if (c instanceof Closeable) {
+                ((Closeable) c).close();
+            }
+        }
+    }
 }

@@ -1,16 +1,16 @@
-package nl.gogognome.lib.swing;
+package nl.gogognome.lib.swing.action;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
+import java.beans.PropertyChangeListener;
 
 /**
  * This class wraps an <code>AbstractAction</code>. It allows to change
  * the behavior of the <code>actionPerformed()</code> method dynamically.
  */
 public class ActionWrapper extends AbstractAction {
+
+    private final PropertyChangeListener propertyChangeListener = evt -> firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 
     /**
      * The action to which <code>actionPerformed()</code> is forwarded.
@@ -41,12 +41,20 @@ public class ActionWrapper extends AbstractAction {
     }
 
     public void setAction(Action action) {
-        this.action = action;
+        Action oldValue = this.action;
+        if (oldValue == null || !oldValue.equals(action)) {
+            this.action = action;
+            if (oldValue != null) {
+                oldValue.removePropertyChangeListener(propertyChangeListener);
+            }
+
+            if (action != null) {
+                action.addPropertyChangeListener(propertyChangeListener);
+            }
+        }
+
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
 	public void actionPerformed(ActionEvent event) {
         // By using a copy of the action variable synchronization problems are prevented.
@@ -54,5 +62,18 @@ public class ActionWrapper extends AbstractAction {
         if (localAction != null) {
             localAction.actionPerformed(event);
         }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return action != null ? action.isEnabled() : super.isEnabled();
+    }
+
+    @Override
+    public void setEnabled(boolean newValue) {
+        if (action != null) {
+            action.setEnabled(newValue);
+        }
+        super.setEnabled(newValue);
     }
 }

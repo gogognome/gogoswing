@@ -37,6 +37,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
+import nl.gogognome.lib.swing.action.ActionWrapper;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
@@ -112,7 +113,7 @@ public class WidgetFactory {
 	/**
 	 * Creates a button.
 	 * @param id the id of the button's description in the resources.
-	 * @param the action to be performed when the button is pressed
+	 * @param action the action to be performed when the button is pressed
 	 * @return the button.
 	 */
 	public JButton createButton(String id, Action action) {
@@ -125,7 +126,7 @@ public class WidgetFactory {
 	/**
 	 * Creates a button containing an icon only.
 	 * @param id the id of the button's description in the resources.
-	 * @param the action to be performed when the button is pressed
+	 * @param action the action to be performed when the button is pressed
 	 * @param size the width and height in pixels
 	 * @return the button.
 	 */
