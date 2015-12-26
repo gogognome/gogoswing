@@ -37,6 +37,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
+import nl.gogognome.lib.swing.action.ActionWrapper;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
