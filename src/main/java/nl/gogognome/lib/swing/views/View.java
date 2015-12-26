@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.gui.beans.BeanFactory;
+import nl.gogognome.lib.swing.MessageDialog;
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
@@ -42,9 +43,11 @@ public abstract class View extends JPanel implements Closeable {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private static final long serialVersionUID = 1L;
+    /** Listeners of this view that get informed when this view is closed. */
+    private List<ViewListener> listeners = new ArrayList<>();
 
-    private ArrayList<ViewListener> listeners = new ArrayList<ViewListener>();
+    /** Objects to be closed when the view is closed. */
+    private List<Closeable> closeables = new ArrayList<>();
 
     /**
      * This action closes the view. The action will be set before the view
@@ -54,9 +57,6 @@ public abstract class View extends JPanel implements Closeable {
 
     private Window parentWindow;
     private JButton defaultButton;
-
-    /** Objects to be closed when the view is closed. */
-    private List<Closeable> closeables = new ArrayList<Closeable>();
 
     protected TextResource textResource = Factory.getInstance(TextResource.class);
     protected WidgetFactory widgetFactory = Factory.getInstance(WidgetFactory.class);
@@ -70,17 +70,19 @@ public abstract class View extends JPanel implements Closeable {
 
     /**
      * Gets the default button of this view.
-     * @return the default button of this view or <code>null</code> if this view
-     *         has no default button
+     * Override this method to specify a default button.
+     * @return the default button of this view or <code>null</code> if this view has no default button
      */
     JButton getDefaultButton() {
         return defaultButton;
     }
 
-    /** This method is called before the view is shown. It initializes the view. */
+    /**
+     * This method is called before the view is shown. It initializes the view.
+     */
     public abstract void onInit();
 
-    /** This method is called just before the view is closed. It can free resources. */
+    /** This method is called just before the view is closed. Override this method to free resources. */
     public abstract void onClose();
 
     /**
@@ -88,11 +90,11 @@ public abstract class View extends JPanel implements Closeable {
      *
      * @param closeAction the close action
      */
-    public void setCloseAction(Action closeAction) {
+    void setCloseAction(Action closeAction) {
         this.closeAction = closeAction;
     }
 
-    public void setParentWindow(Window parentWindow) {
+    void setParentWindow(Window parentWindow) {
         this.parentWindow = parentWindow;
     }
 
@@ -138,24 +140,39 @@ public abstract class View extends JPanel implements Closeable {
      * Closes the view and notifies listeners.
      */
     void doClose() {
-        logger.debug("Closing view " + getClass().getName());
+        logger.debug("Start closing view " + getClass().getName());
 
-        onClose();
+        try {
+            onClose();
+        } catch (Exception e) {
+            MessageDialog.showErrorMessage(getParent(), e, "gen.titleError");
+        }
 
         for (Closeable d : closeables) {
-        	d.close();
+            try {
+            	d.close();
+            } catch (Exception e) {
+                logger.warn("Ignored exception: " + e.getMessage(), e);
+            }
         }
 
         ViewListener[] tempListeners = listeners.toArray(new ViewListener[listeners.size()]);
-        for (int i = 0; i < tempListeners.length; i++) {
-            tempListeners[i].onViewClosed(this);
+        for (ViewListener tempListener : tempListeners) {
+            try {
+                tempListener.onViewClosed(this);
+            } catch (Exception e) {
+                logger.warn("Ignored exception: " + e.getMessage(), e);
+            }
         }
+
+        logger.debug("Finished closing view " + getClass().getName());
     }
 
 	/** Initializes the view. */
     void doInit() {
-        logger.debug("Initializing view " + getClass().getName());
+        logger.debug("Start initializing view " + getClass().getName());
         onInit();
+        logger.debug("Finished initializing view " + getClass().getName());
     }
 
     @Override
