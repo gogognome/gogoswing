@@ -36,55 +36,55 @@ public class MessageDialog extends DialogWithButtons {
      * <code>CANCEL_OPTION</code> or <code>NO_OPTION</code>. */
     public static final int CLOSED_OPTION = JOptionPane.CLOSED_OPTION;
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(MessageDialog.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MessageDialog.class);
 
-	/**
-	 * Constructor.
-	 *
-	 * @param owner the owner of this dialog.
-	 * @param titleId the id of the title string.
-	 * @param message the message to be shown to the user.
-	 */
-	private MessageDialog(Frame owner, String titleId, String message) {
-		this(owner, titleId, message, BT_OK);
-	}
+    /**
+     * Constructor.
+     *
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     */
+    private MessageDialog(Frame owner, String titleId, String message) {
+        this(owner, titleId, message, BT_OK);
+    }
 
-	/**
-	 * Constructor.
-	 *
-	 * @param owner the owner of this dialog.
-	 * @param titleId the id of the title string.
-	 * @param message the message to be shown to the user.
-	 * @param buttonIds the ids of the buttons.
-	 */
-	private MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
-		super(owner, titleId, buttonIds);
-		showDialog(message);
-	}
+    /**
+     * Constructor.
+     *
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     * @param buttonIds the ids of the buttons.
+     */
+    private MessageDialog(Frame owner, String titleId, String message, String[] buttonIds) {
+        super(owner, titleId, buttonIds);
+        showDialog(message);
+    }
 
-	/**
-	 * Constructor.
-	 *
-	 * @param owner the owner of this dialog.
-	 * @param titleId the id of the title string.
-	 * @param message the message to be shown to the user.
-	 */
-	private MessageDialog(Dialog owner, String titleId, String message) {
-		this(owner, titleId, message, BT_OK);
-	}
+    /**
+     * Constructor.
+     *
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     */
+    private MessageDialog(Dialog owner, String titleId, String message) {
+        this(owner, titleId, message, BT_OK);
+    }
 
-	/**
-	 * Constructor.
-	 *
-	 * @param owner the owner of this dialog.
-	 * @param titleId the id of the title string.
-	 * @param message the message to be shown to the user.
-	 * @param buttonIds the ids of the buttons.
-	 */
-	private MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) {
-		super(owner, titleId, buttonIds);
-		showDialog(message);
-	}
+    /**
+     * Constructor.
+     *
+     * @param owner the owner of this dialog.
+     * @param titleId the id of the title string.
+     * @param message the message to be shown to the user.
+     * @param buttonIds the ids of the buttons.
+     */
+    private MessageDialog(Dialog owner, String titleId, String message, String[] buttonIds) {
+        super(owner, titleId, buttonIds);
+        showDialog(message);
+    }
 
     /**
      * Constructor.
@@ -98,57 +98,58 @@ public class MessageDialog extends DialogWithButtons {
         t.printStackTrace();
     }
 
-	/**
-	 * Shows the dialog.
-	 * @param message the message to be shown. The sequence of the characters
-	 *        '\\' and 'n' indicate a line break.
-	 */
-	private void showDialog( String message ) {
-	    String[] lines = message.split("\\n");
-	    Component messageComponent;
-	    if (lines.length > 1) {
-		    JPanel panel = new JPanel(new GridLayout(lines.length, 1));
-		    for (int i = 0; i < lines.length; i++) {
+    /**
+     * Shows the dialog.
+     * @param message the message to be shown. The sequence of the characters
+     *        '\\' and 'n' indicate a line break.
+     */
+    private void showDialog(String message) {
+        String[] lines = message.split("\\n");
+        Component messageComponent;
+        if (lines.length > 1) {
+            JPanel panel = new JPanel(new GridLayout(lines.length, 1));
+            for (int i = 0; i < lines.length; i++) {
                 panel.add(new JLabel(lines[i]));
             }
-	        messageComponent = panel;
-	    } else {
-	        messageComponent = new JLabel(message);
-	    }
-		componentInitialized(messageComponent);
-		super.showDialog();
-	}
+            messageComponent = panel;
+        } else {
+            messageComponent = new JLabel(message);
+        }
 
-	/**
-	 * Shows an info message dialog.
+        componentInitialized(messageComponent);
+        super.showDialog();
+    }
+
+    /**
+     * Shows an info message dialog.
      * @param parentComponent determines the <code>Frame</code>
      *		in which the dialog is displayed; if <code>null</code>,
      *		or if the <code>parentComponent</code> has no
      *		<code>Frame</code>, a default <code>Frame</code> is used
-	 * @param message the id of the message to be shown to the user.
+     * @param messageId the id of the message to be shown to the user.
      * @param args optional arguments to be filled in the placeholders of the message
-	 */
-	public static void showInfoMessage(Component parentComponent, String messageId, Object... args) {
-		TextResource tr = Factory.getInstance(TextResource.class);
-		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args),
-				tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
-	}
+     */
+    public static void showInfoMessage(Component parentComponent, String messageId, Object... args) {
+        TextResource tr = Factory.getInstance(TextResource.class);
+        JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args),
+                tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
+    }
 
-	/**
-	 * Shows a message dialog.
+    /**
+     * Shows a message dialog.
      * @param parentComponent determines the <code>Frame</code>
      *		in which the dialog is displayed; if <code>null</code>,
      *		or if the <code>parentComponent</code> has no
      *		<code>Frame</code>, a default <code>Frame</code> is used
-	 * @param titleId the id of the title string.
-	 * @param message the id of the message to be shown to the user.
+     * @param titleId the id of the title string.
+     * @param messageId the id of the message to be shown to the user.
      * @param args optional arguments to be filled in the placeholders of the message
-	 */
-	public static void showMessage(Component parentComponent, String titleId, String messageId, Object... args) {
-		TextResource tr = Factory.getInstance(TextResource.class);
-		JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), tr.getString(titleId),
-				JOptionPane.INFORMATION_MESSAGE);
-	}
+     */
+    public static void showMessage(Component parentComponent, String titleId, String messageId, Object... args) {
+        TextResource tr = Factory.getInstance(TextResource.class);
+        JOptionPane.showMessageDialog(parentComponent, tr.getString(messageId, args), tr.getString(titleId),
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
     /**
      * Shows a warning message dialog.
@@ -160,9 +161,9 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showWarningMessage(Component parentComponent, String messageId, Object... args) {
-    	TextResource tr = Factory.getInstance(TextResource.class);
-    	String message = tr.getString(messageId, args);
-    	showFormattedMessage(parentComponent, message, JOptionPane.WARNING_MESSAGE);
+        TextResource tr = Factory.getInstance(TextResource.class);
+        String message = tr.getString(messageId, args);
+        showFormattedMessage(parentComponent, message, JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -175,10 +176,10 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showErrorMessage(Component parentComponent, String messageId, Object... args) {
-    	TextResource tr = Factory.getInstance(TextResource.class);
-    	String message = tr.getString(messageId, args);
-    	LOGGER.warn(message);
-    	showFormattedMessage(parentComponent, message, JOptionPane.ERROR_MESSAGE);
+        TextResource tr = Factory.getInstance(TextResource.class);
+        String message = tr.getString(messageId, args);
+        LOGGER.warn(message);
+        showFormattedMessage(parentComponent, message, JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -192,16 +193,16 @@ public class MessageDialog extends DialogWithButtons {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public static void showErrorMessage(Component parentComponent, Throwable t, String messageId, Object... args) {
-    	TextResource tr = Factory.getInstance(TextResource.class);
-    	List<String> lines = new ArrayList<String>();
-    	String message = tr.getString(messageId, args);
-    	lines.add(message);
+        TextResource tr = Factory.getInstance(TextResource.class);
+        List<String> lines = new ArrayList<>();
+        String message = tr.getString(messageId, args);
+        lines.add(message);
 
-    	LOGGER.warn(message, t);
+        LOGGER.warn(message, t);
 
-    	addStackTraceToLines(lines, t);
+        addStackTraceToLines(lines, t);
 
-    	showFormattedMessage(parentComponent, lines.toArray(), JOptionPane.ERROR_MESSAGE);
+        showFormattedMessage(parentComponent, lines.toArray(), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -216,7 +217,7 @@ public class MessageDialog extends DialogWithButtons {
      * @return {@link #YES_OPTION}, {@link #NO_OPTION} or {@link #CLOSED_OPTION}.
      */
     public static int showYesNoQuestion(Component parentComponent, String titleId, String messageId, Object...args) {
-    	return showConfirmationDialog(JOptionPane.YES_NO_OPTION, parentComponent, titleId, messageId, args);
+        return showConfirmationDialog(JOptionPane.YES_NO_OPTION, parentComponent, titleId, messageId, args);
     }
 
     /**
@@ -231,53 +232,53 @@ public class MessageDialog extends DialogWithButtons {
      * @return {@link #YES_OPTION}, {@link #NO_OPTION}, {@link #CANCEL_OPTION} or {@link #CLOSED_OPTION}.
      */
     public static int showYesNoCancelQuestion(Component parentComponent, String titleId, String messageId, Object...args) {
-    	return showConfirmationDialog(JOptionPane.YES_NO_CANCEL_OPTION, parentComponent, titleId, messageId, args);
+        return showConfirmationDialog(JOptionPane.YES_NO_CANCEL_OPTION, parentComponent, titleId, messageId, args);
     }
 
     private static int showConfirmationDialog(int type, Component parentComponent, String titleId, String messageId, Object...args) {
-    	TextResource tr = Factory.getInstance(TextResource.class);
-    	String title = tr.getString(titleId);
-    	String message = tr.getString(messageId, args);
-    	return JOptionPane.showConfirmDialog(parentComponent, message, title, type);
+        TextResource tr = Factory.getInstance(TextResource.class);
+        String title = tr.getString(titleId);
+        String message = tr.getString(messageId, args);
+        return JOptionPane.showConfirmDialog(parentComponent, message, title, type);
     }
 
-	private static void addStackTraceToLines(List<String> lines, Throwable t) {
-    	while (t != null) {
-    		lines.add(t.getClass().getName() + ": " + t.getMessage());
-        	for (StackTraceElement ste : t.getStackTrace()) {
-        		lines.add(ste.toString());
-        	}
+    private static void addStackTraceToLines(List<String> lines, Throwable t) {
+        while (t != null) {
+            lines.add(t.getClass().getName() + ": " + t.getMessage());
+            for (StackTraceElement ste : t.getStackTrace()) {
+                lines.add(ste.toString());
+            }
 
-        	t = getCause(t);
-    	}
-	}
+            t = getCause(t);
+        }
+    }
 
-	private static Throwable getCause(Throwable t) {
-		Throwable cause = t.getCause();
-		if (cause == t) {
-			cause = null;
-		}
-		return cause;
-	}
+    private static Throwable getCause(Throwable t) {
+        Throwable cause = t.getCause();
+        if (cause == t) {
+            cause = null;
+        }
+        return cause;
+    }
 
-	private static void showFormattedMessage(Component parentComponent, Object message, int messageType) {
-		if (message instanceof Object[]) {
-			message = truncateMessage((Object[]) message, 20);
-		}
+    private static void showFormattedMessage(Component parentComponent, Object message, int messageType) {
+        if (message instanceof Object[]) {
+            message = truncateMessage((Object[]) message, 20);
+        }
 
-    	JOptionPane.showMessageDialog(parentComponent, message,
-    			Factory.getInstance(TextResource.class).getString("gen.titleError"), messageType);
-	}
+        JOptionPane.showMessageDialog(parentComponent, message,
+                Factory.getInstance(TextResource.class).getString("gen.titleError"), messageType);
+    }
 
-	private static Object[] truncateMessage(Object[] message, int maxNrLines) {
-		if (message.length > maxNrLines) {
-			Object[] newMessage = new Object[maxNrLines];
-			System.arraycopy(message, 0, newMessage, 0, maxNrLines-1);
-			newMessage[maxNrLines-1] = "...";
-			return newMessage;
-		} else {
-			return message;
-		}
-	}
+    private static Object[] truncateMessage(Object[] message, int maxNrLines) {
+        if (message.length > maxNrLines) {
+            Object[] newMessage = new Object[maxNrLines];
+            System.arraycopy(message, 0, newMessage, 0, maxNrLines-1);
+            newMessage[maxNrLines-1] = "...";
+            return newMessage;
+        } else {
+            return message;
+        }
+    }
 
 }
