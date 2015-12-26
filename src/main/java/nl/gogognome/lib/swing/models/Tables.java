@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class Tables {
@@ -22,6 +23,10 @@ public class Tables {
      */
     public static Closeable onSelectionChange(JTable table, RunnableWithException listenerImplementation) {
         ListSelectionListener listener = event -> {
+            if (event.getValueIsAdjusting()) {
+                return; // ignore events while selection is adjusting
+            }
+
             try {
                 listenerImplementation.run();
             } catch (Exception e) {
@@ -29,7 +34,7 @@ public class Tables {
             }
         };
         table.getSelectionModel().addListSelectionListener(listener);
-        listener.valueChanged(null);
+        listener.valueChanged(new ListSelectionEvent(table, 0, 0, false));
         return () -> table.getSelectionModel().removeListSelectionListener(listener);
     }
 
