@@ -8,7 +8,10 @@ I discovered that while I was writing Gogo Account I was duplicating a lot of co
 
 #What does Gogo Swing offer?
 - Date picker widget
-- Column definitions to make it easier to create tables supporting different types of data
 - Models for a string, double, boolean and date that can be bound different types of widgets. Changes in the widgets are synchronized with the models and changes to the models are synchronized with the widgets.
 - Dedicated panels for labeled input fields
-- Views. A view is a panel that can be closed.
+- Views. A view represents a rectangular area inside a dialog or frame. A view typically implements a cohesive part of the user interface.
+- Tabbed panes with a close button.
+- Column definitions and several table models to make it easier to create tables with any type of data.
+- Sortable tables.
+
