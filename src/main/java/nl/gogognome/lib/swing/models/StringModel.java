@@ -8,9 +8,15 @@ import nl.gogognome.lib.util.ComparatorUtil;
 public class StringModel extends AbstractModel {
 
     private String string;
+    private boolean mustBeFilled;
 
     public String getString() {
         return string;
+    }
+
+    public StringModel mustBeFilled(boolean mustBeFilled) {
+        this.mustBeFilled = mustBeFilled;
+        return this;
     }
 
     /**
@@ -33,5 +39,14 @@ public class StringModel extends AbstractModel {
             this.string = newString;
             notifyListeners(source);
         }
+    }
+
+    @Override
+    public boolean validate() {
+        errorResourceIds.clear();
+        if (mustBeFilled && (string == null || string.isEmpty())) {
+            errorResourceIds.add("validation.fieldMustBeFilledIn");
+        }
+        return errorResourceIds.isEmpty();
     }
 }
