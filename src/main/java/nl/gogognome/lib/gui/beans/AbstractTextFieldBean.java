@@ -1,14 +1,10 @@
 package nl.gogognome.lib.gui.beans;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.FocusListener;
 import java.text.ParseException;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -16,6 +12,7 @@ import javax.swing.event.DocumentListener;
 import nl.gogognome.lib.swing.SwingUtils;
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
+import nl.gogognome.lib.text.TextResource;
 
 /**
  * Base class for a text field bean. Make sure that after instantiation
@@ -31,11 +28,15 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     /** The text field in which the user can enter the string. */
     private JTextField textfield;
 
+    private JLabel errorMessages;
+
     /** The listener for changes made programmatically. */
     private ModelChangeListener modelChangeListener;
 
     /** Listener for changes made by the user. */
     private DocumentListener documentListener;
+
+    private final TextResource textResource;
 
     private int nrColumns;
 
@@ -43,8 +44,8 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      * Constructor.
      * @param model the model that will reflect the content of the bean
      */
-    protected AbstractTextFieldBean(M model) {
-    	this(model, 0);
+    protected AbstractTextFieldBean(M model, TextResource textResource) {
+    	this(model, 0, textResource);
     }
 
     /**
@@ -52,10 +53,12 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      * @param model the model that will reflect the content of the bean
      * @param nrColumns the width of the text field as the number of columns.
      *        The value 0 indicates that the width can be determined by the layout manager.
+     * @param textResource the text resource for obtaining error messages
      */
-    protected AbstractTextFieldBean(M model, int nrColumns) {
+    protected AbstractTextFieldBean(M model, int nrColumns, TextResource textResource) {
     	this.model = model;
     	this.nrColumns = nrColumns;
+        this.textResource = textResource;
     }
 
     @Override
@@ -64,6 +67,8 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         setLayout(new GridBagLayout());
 
         textfield = createTextField(nrColumns);
+        errorMessages = new JLabel();
+        errorMessages.setForeground(Color.RED);
 
         updateTextField();
         modelChangeListener = new UpdateTextFieldOnModelChangeListener();
@@ -75,6 +80,10 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
             GridBagConstraints.WEST, nrColumns == 0 ? GridBagConstraints.HORIZONTAL : GridBagConstraints.NONE,
             0, 0, 0, 0));
+
+        add(errorMessages, SwingUtils.createGBConstraints(1,0, 1, 1, 1.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+                0, 0, 0, 0));
     }
 
     protected JTextField createTextField(int nrColumns) {
@@ -92,19 +101,14 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         documentListener = null;
         model = null;
         textfield = null;
+        errorMessages = null;
     }
 
-    /**
-     * @see JComponent#addFocusListener(FocusListener)
-     */
     @Override
 	public void addFocusListener(FocusListener listener) {
         textfield.addFocusListener(listener);
     }
 
-    /**
-     * @see JComponent#removeFocusListener(FocusListener)
-     */
     @Override
 	public void removeFocusListener(FocusListener listener) {
         textfield.removeFocusListener(listener);
@@ -120,6 +124,22 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
             textfield.setText(string);
         } else {
             textfield.setText("");
+        }
+
+        String oldErrorMessages = errorMessages.getText();
+        String newErrorMessages = model.getErrorResourceIds().stream().map(id -> textResource.getString(id)).reduce((t, u) -> t + ' ' + u).orElse(null);
+        if (newErrorMessages.isEmpty()) {
+            newErrorMessages = null;
+        }
+        if (oldErrorMessages == null || !oldErrorMessages.equals(newErrorMessages)) {
+            errorMessages.setText(newErrorMessages);
+            Container topLevelContainer = SwingUtils.getTopLevelContainer(this);
+            if (topLevelContainer != null) {
+                topLevelContainer.revalidate();
+                if (topLevelContainer instanceof Window) {
+                    ((Window) topLevelContainer).pack();
+                }
+            }
         }
     }
 

@@ -148,6 +148,7 @@ public class ListModel<T> extends AbstractModel {
         if (mustBeFilled && getSelectedItem() == null) {
             errorResourceIds.add("validation.fieldMustBeFilledIn");
         }
+        notifyListeners(null);
         return errorResourceIds.isEmpty();
     }
 

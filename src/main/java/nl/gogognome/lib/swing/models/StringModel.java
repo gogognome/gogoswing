@@ -23,8 +23,9 @@ public class StringModel extends AbstractModel {
      * Sets the string of this model.
      * @param newString the new value of the string
      */
-    public void setString(String newString) {
+    public StringModel setString(String newString) {
     	setString(newString, null);
+        return this;
     }
 
     /**
@@ -47,6 +48,7 @@ public class StringModel extends AbstractModel {
         if (mustBeFilled && (string == null || string.isEmpty())) {
             errorResourceIds.add("validation.fieldMustBeFilledIn");
         }
+        notifyListeners(null);
         return errorResourceIds.isEmpty();
     }
 }

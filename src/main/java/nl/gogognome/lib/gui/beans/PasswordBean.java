@@ -4,6 +4,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import nl.gogognome.lib.swing.models.StringModel;
+import nl.gogognome.lib.text.TextResource;
 
 /**
  * This class implements a bean for password entry.
@@ -12,12 +13,12 @@ public class PasswordBean extends TextFieldBean {
 
 	private static final long serialVersionUID = 1L;
 
-	public PasswordBean(StringModel stringModel) {
-		super(stringModel);
+	public PasswordBean(StringModel stringModel, TextResource textResource) {
+		super(stringModel, textResource);
 	}
 
-	public PasswordBean(StringModel stringModel, int nrColumns) {
-		super(stringModel, nrColumns);
+	public PasswordBean(StringModel stringModel, int nrColumns, TextResource textResource) {
+		super(stringModel, nrColumns, textResource);
 	}
 
 	@Override

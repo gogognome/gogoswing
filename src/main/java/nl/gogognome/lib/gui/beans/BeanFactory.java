@@ -9,14 +9,19 @@ import nl.gogognome.lib.swing.models.DoubleModel;
 import nl.gogognome.lib.swing.models.FileModel;
 import nl.gogognome.lib.swing.models.ListModel;
 import nl.gogognome.lib.swing.models.StringModel;
+import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
 /**
  * This class is a factory for creating beans.
  */
 public class BeanFactory {
-	public BeanFactory() {
-	}
+
+    private final TextResource textResource;
+
+    public BeanFactory(TextResource textResource) {
+        this.textResource = textResource;
+    }
 
     /**
      * Creates a check box bean for the specified model.
@@ -24,9 +29,9 @@ public class BeanFactory {
      * @return the check box bean
      */
     public CheckBoxBean createCheckBoxBean(BooleanModel model) {
-    	CheckBoxBean bean = new CheckBoxBean(model);
-    	bean.initBean();
-    	return bean;
+        CheckBoxBean bean = new CheckBoxBean(model);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -36,12 +41,12 @@ public class BeanFactory {
      * @return the radio button bean
      */
     public RadioButtonBean createRadioButtonBean(String id, BooleanModel model) {
-    	RadioButtonBean bean = new RadioButtonBean(model);
-    	WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
-    	Action action = wf.createAction(id);
-    	bean.setAction(action);
-    	bean.initBean();
-    	return bean;
+        RadioButtonBean bean = new RadioButtonBean(model);
+        WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
+        Action action = wf.createAction(id);
+        bean.setAction(action);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -50,9 +55,9 @@ public class BeanFactory {
      * @return the file selection bean
      */
     public FileSelectionBean createFileSelectionBean(FileModel model) {
-    	FileSelectionBean bean = new FileSelectionBean(model);
-    	bean.initBean();
-    	return bean;
+        FileSelectionBean bean = new FileSelectionBean(model);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -61,9 +66,9 @@ public class BeanFactory {
      * @return the combo box bean
      */
     public <T> ComboBoxBean<T> createComboBoxBean(ListModel<T> model) {
-    	ComboBoxBean<T> bean = new ComboBoxBean<T>(model);
-    	bean.initBean();
-    	return bean;
+        ComboBoxBean<T> bean = new ComboBoxBean<T>(model);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -72,9 +77,9 @@ public class BeanFactory {
      * @return the text field bean
      */
     public TextFieldBean createTextFieldBean(StringModel model) {
-    	TextFieldBean bean = new TextFieldBean(model);
-    	bean.initBean();
-    	return bean;
+        TextFieldBean bean = new TextFieldBean(model, textResource);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -84,9 +89,9 @@ public class BeanFactory {
      * @return the text field bean
      */
     public TextFieldBean createTextFieldBean(StringModel model, int nrColumns) {
-    	TextFieldBean bean = new TextFieldBean(model, nrColumns);
-    	bean.initBean();
-    	return bean;
+        TextFieldBean bean = new TextFieldBean(model, nrColumns, textResource);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -95,11 +100,11 @@ public class BeanFactory {
      * @param nrColumns the number of columns
      * @return the password bean
      */
-	public PasswordBean createPasswordBean(StringModel model, int nrColumns) {
-    	PasswordBean bean = new PasswordBean(model, nrColumns);
-    	bean.initBean();
-    	return bean;
-	}
+    public PasswordBean createPasswordBean(StringModel model, int nrColumns) {
+        PasswordBean bean = new PasswordBean(model, nrColumns, textResource);
+        bean.initBean();
+        return bean;
+    }
 
     /**
      * Creates a double field bean for the specified double model.
@@ -107,9 +112,9 @@ public class BeanFactory {
      * @return the double field bean
      */
     public DoubleFieldBean createDoubleFieldBean(DoubleModel model) {
-    	DoubleFieldBean bean = new DoubleFieldBean(model);
-    	bean.initBean();
-    	return bean;
+        DoubleFieldBean bean = new DoubleFieldBean(model, textResource);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -119,9 +124,9 @@ public class BeanFactory {
      * @return the text field bean
      */
     public DoubleFieldBean createDoubleFieldBean(DoubleModel model, int nrColumns) {
-    	DoubleFieldBean bean = new DoubleFieldBean(model, nrColumns);
-    	bean.initBean();
-    	return bean;
+        DoubleFieldBean bean = new DoubleFieldBean(model, nrColumns, textResource);
+        bean.initBean();
+        return bean;
     }
 
     /**
@@ -130,8 +135,8 @@ public class BeanFactory {
      * @return the date field bean
      */
     public DateSelectionBean createDateSelectionBean(DateModel model) {
-    	DateSelectionBean bean = new DateSelectionBean(model);
-    	bean.initBean();
-    	return bean;
+        DateSelectionBean bean = new DateSelectionBean(model, textResource);
+        bean.initBean();
+        return bean;
     }
 }
