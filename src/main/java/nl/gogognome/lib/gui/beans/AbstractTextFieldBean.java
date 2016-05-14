@@ -128,7 +128,7 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 
         String oldErrorMessages = errorMessages.getText();
         String newErrorMessages = model.getErrorResourceIds().stream().map(id -> textResource.getString(id)).reduce((t, u) -> t + ' ' + u).orElse(null);
-        if (newErrorMessages.isEmpty()) {
+        if (newErrorMessages != null && newErrorMessages.isEmpty()) {
             newErrorMessages = null;
         }
         if (oldErrorMessages == null || !oldErrorMessages.equals(newErrorMessages)) {
