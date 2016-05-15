@@ -78,15 +78,6 @@ public abstract class View extends JPanel implements Closeable {
     }
 
     /**
-     * Override this method to specifiy the minimum size of the view.
-     * By default, this method returns null.
-     * @return the minimum size or null if the minimum size is not specified.
-     */
-    public Dimension getMinimumSize() {
-        return null;
-    }
-
-    /**
      * This method is called before the view is shown. It initializes the view.
      */
     public abstract void onInit();
