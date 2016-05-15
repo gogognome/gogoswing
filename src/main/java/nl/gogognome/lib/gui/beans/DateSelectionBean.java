@@ -25,10 +25,9 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     /**
      * Constructor.
      * @param dateModel the date model that will reflect the content of the bean
-     * @param textResource the text resource for obtaining error messages
      */
-    protected DateSelectionBean(DateModel dateModel, TextResource textResource) {
-    	super(dateModel, 10, textResource);
+    protected DateSelectionBean(DateModel dateModel) {
+    	super(dateModel, 10);
     }
 
     @Override

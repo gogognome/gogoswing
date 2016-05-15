@@ -1,14 +1,12 @@
 package nl.gogognome.lib.gui.beans;
 
-import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JCheckBox;
-
-import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.BooleanModel;
 import nl.gogognome.lib.swing.models.ModelChangeListener;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * This class implements a bean for selecting a <code>Boolean</code>.
@@ -36,14 +34,7 @@ public class CheckBoxBean extends JCheckBox implements Bean {
         setLayout(new GridBagLayout());
 
         updateRadioButton();
-        modelChangeListener = new ModelChangeListener() {
-
-            @Override
-			public void modelChanged(AbstractModel model) {
-                updateRadioButton();
-            }
-
-        };
+        modelChangeListener = model1 -> updateRadioButton();
         booleanModel.addModelChangeListener(modelChangeListener);
 
         itemListener = new ItemListenerImpl();
@@ -51,12 +42,14 @@ public class CheckBoxBean extends JCheckBox implements Bean {
     }
 
     @Override
+    public JComponent getComponent() {
+        return this;
+    }
+
+    @Override
 	public void close() {
         booleanModel.removeModelChangeListener(modelChangeListener);
         removeItemListener(itemListener);
-        modelChangeListener = null;
-        itemListener = null;
-        booleanModel = null;
     }
 
     /**

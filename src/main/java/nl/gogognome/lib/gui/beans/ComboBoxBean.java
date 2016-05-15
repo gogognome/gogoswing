@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import nl.gogognome.lib.swing.JComboBoxWithKeyboardInput;
@@ -51,26 +50,21 @@ public class ComboBoxBean<T> extends JComboBoxWithKeyboardInput implements Bean 
 			setSelectedIndex(index);
 		}
 
-		modelChangeListener = new ModelChangeListener() {
-			@Override
-			public void modelChanged(AbstractModel model) {
-				onModelChanged();
-			}
-		};
+		modelChangeListener = model -> onModelChanged();
 
 		listModel.addModelChangeListener(modelChangeListener);
 
-		itemListener = new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				updateSelectedItemInModel();
-			}
-		};
+		itemListener = e -> updateSelectedItemInModel();
 		addItemListener(itemListener);
 		updateSelectionInCombobox();
 	}
 
-	private void updateSelectionInCombobox() {
+    @Override
+    public JComponent getComponent() {
+        return this;
+    }
+
+    private void updateSelectionInCombobox() {
 		setSelectedIndex(listModel.getSelectedIndex());
 	}
 

@@ -80,11 +80,13 @@ public class ViewDialog {
      * Shows the dialog.
      */
     final public void showDialog() {
-        // Show the dialog.
+        if (view.getMinimumSize() != null) {
+            dialog.setMinimumSize(view.getMinimumSize());
+        }
         dialog.pack();
         Dimension d = dialog.getPreferredSize();
-        dialog.setLocation( parentBounds.x + (parentBounds.width-d.width)/2,
-            parentBounds.y + (parentBounds.height-d.height)/2 );
+        dialog.setLocation(parentBounds.x + (parentBounds.width-d.width)/2,
+            parentBounds.y + (parentBounds.height-d.height)/2);
         dialog.setVisible(true);
     }
 

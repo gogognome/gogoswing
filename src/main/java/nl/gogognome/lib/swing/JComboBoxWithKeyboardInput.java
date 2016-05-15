@@ -50,7 +50,7 @@ public class JComboBoxWithKeyboardInput extends JComboBox
     	addItemWithStringRepresentation(item, item.toString());
     }
 
-    protected void addItemWithStringRepresentation(Object item, String representation) {
+    public void addItemWithStringRepresentation(Object item, String representation) {
     	super.addItem(item);
         itemStrings.add(representation);
     }

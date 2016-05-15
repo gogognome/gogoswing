@@ -3,8 +3,7 @@ package nl.gogognome.lib.gui.beans;
 import java.awt.Component;
 import java.awt.GridBagLayout;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.swing.SwingUtils;
@@ -27,9 +26,9 @@ public class RadioButtonPanel extends JPanel implements Closeable {
 	}
 
 	public void addRadioButton(String id, BooleanModel model) {
-		RadioButtonBean bean = beanFactory.createRadioButtonBean(id, model);
-		add(bean, SwingUtils.createTextFieldGBConstraints(0, getComponentCount()));
-		buttonGroup.add(bean);
+		Bean bean = beanFactory.createRadioButtonBean(id, model);
+		add(bean.getComponent(), SwingUtils.createTextFieldGBConstraints(0, getComponentCount()));
+		buttonGroup.add((AbstractButton) bean.getComponent());
 	}
 
 	@Override

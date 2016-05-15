@@ -14,11 +14,11 @@ public class PasswordBean extends TextFieldBean {
 	private static final long serialVersionUID = 1L;
 
 	public PasswordBean(StringModel stringModel, TextResource textResource) {
-		super(stringModel, textResource);
+		super(stringModel);
 	}
 
-	public PasswordBean(StringModel stringModel, int nrColumns, TextResource textResource) {
-		super(stringModel, nrColumns, textResource);
+	public PasswordBean(StringModel stringModel, int nrColumns) {
+		super(stringModel, nrColumns);
 	}
 
 	@Override

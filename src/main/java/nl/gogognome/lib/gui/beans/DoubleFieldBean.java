@@ -16,10 +16,9 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
     /**
      * Constructor.
      * @param doubleModel the double model that will reflect the content of the bean
-	 * @param textResource the text resource for obtaining error messages
      */
-    protected DoubleFieldBean(DoubleModel doubleModel, TextResource textResource) {
-    	super(doubleModel, textResource);
+    protected DoubleFieldBean(DoubleModel doubleModel) {
+    	super(doubleModel);
     }
 
     /**
@@ -27,10 +26,9 @@ public class DoubleFieldBean extends AbstractTextFieldBean<DoubleModel> {
      * @param doubleModel the double model that will reflect the content of the bean
      * @param nrColumns the width of the text field as the number of columns.
      *        The value 0 indicates that the width can be determined by the layout manager.
-	 * @param textResource the text resource for obtaining error messages
      */
-    protected DoubleFieldBean(DoubleModel doubleModel, int nrColumns, TextResource textResource) {
-    	super(doubleModel, nrColumns, textResource);
+    protected DoubleFieldBean(DoubleModel doubleModel, int nrColumns) {
+    	super(doubleModel, nrColumns);
     }
 
     @Override

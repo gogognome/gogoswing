@@ -104,6 +104,11 @@ public class FileSelectionBean extends JPanel implements Bean {
         updateTextField();
     }
 
+    @Override
+    public JComponent getComponent() {
+        return this;
+    }
+
     /**
      * Deinitializes this bean. It will free its resources.
      */

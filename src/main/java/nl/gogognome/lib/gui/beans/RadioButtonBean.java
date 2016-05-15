@@ -4,7 +4,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 import nl.gogognome.lib.swing.models.AbstractModel;
 import nl.gogognome.lib.swing.models.BooleanModel;
@@ -49,6 +49,11 @@ public class RadioButtonBean extends JRadioButton implements Bean {
 
         itemListener = new ItemListenerImpl();
         addItemListener(itemListener);
+    }
+
+    @Override
+    public JComponent getComponent() {
+        return this;
     }
 
     @Override

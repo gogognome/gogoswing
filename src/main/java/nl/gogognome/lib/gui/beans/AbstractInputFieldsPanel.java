@@ -54,7 +54,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the text field
      */
     public void addField(String labelId, StringModel model) {
-        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model));
+        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model).getComponent());
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, StringModel model, int nrColumns) {
-        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createTextFieldBean(model, nrColumns).getComponent());
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DoubleModel model) {
-        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model));
+        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model).getComponent());
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addField(String labelId, DoubleModel model, int nrColumns) {
-        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns).getComponent());
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      *        The value 0 indicates that the width can be determined by the layout manager.
      */
     public void addPasswordField(String labelId, StringModel model, int nrColumns) {
-        addVariableSizeField(labelId, beanFactory.createPasswordBean(model, nrColumns));
+        addVariableSizeField(labelId, beanFactory.createPasswordBean(model, nrColumns).getComponent());
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the check box
      */
     public void addField(String labelId, BooleanModel model) {
-        addVariableSizeField(labelId, beanFactory.createCheckBoxBean(model));
+        addVariableSizeField(labelId, beanFactory.createCheckBoxBean(model).getComponent());
     }
 
     /**
@@ -114,7 +114,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the file seleciton bean
      */
     public void addField(String labelId, FileModel model) {
-        addVariableSizeField(labelId, beanFactory.createFileSelectionBean(model));
+        addVariableSizeField(labelId, beanFactory.createFileSelectionBean(model).getComponent());
     }
 
     /**
@@ -134,7 +134,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the text field
      */
     public void addField(String labelId, DateModel model) {
-        addLabelAndFieldWithConstraints(labelId, beanFactory.createDateSelectionBean(model),
+        addLabelAndFieldWithConstraints(labelId, beanFactory.createDateSelectionBean(model).getComponent(),
         		getFixedSizeFieldConstraints());
     }
 
@@ -144,9 +144,8 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param model the model controlling the combo box
      */
     public <T> void addComboBoxField(String labelId, ListModel<T> model, ObjectFormatter<T> itemFormatter) {
-    	ComboBoxBean<T> bean = beanFactory.createComboBoxBean(model);
-    	bean.setItemFormatter(itemFormatter);
-        addLabelAndFieldWithConstraints(labelId, bean, getFixedSizeFieldConstraints());
+    	Bean bean = beanFactory.createComboBoxBean(model, itemFormatter);
+        addLabelAndFieldWithConstraints(labelId, bean.getComponent(), getFixedSizeFieldConstraints());
     }
 
     protected void addLabelAndFieldWithConstraints(String labelId, JComponent component, GridBagConstraints constraints) {

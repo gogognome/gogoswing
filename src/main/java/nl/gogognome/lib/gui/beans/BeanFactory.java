@@ -28,8 +28,8 @@ public class BeanFactory {
      * @param model the model
      * @return the check box bean
      */
-    public CheckBoxBean createCheckBoxBean(BooleanModel model) {
-        CheckBoxBean bean = new CheckBoxBean(model);
+    public Bean createCheckBoxBean(BooleanModel model) {
+        Bean bean = new ErrorMessageDecorator(new CheckBoxBean(model), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -40,11 +40,13 @@ public class BeanFactory {
      * @param model the model
      * @return the radio button bean
      */
-    public RadioButtonBean createRadioButtonBean(String id, BooleanModel model) {
-        RadioButtonBean bean = new RadioButtonBean(model);
+    public Bean createRadioButtonBean(String id, BooleanModel model) {
+        RadioButtonBean radioButtonBean = new RadioButtonBean(model);
         WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
         Action action = wf.createAction(id);
-        bean.setAction(action);
+        radioButtonBean.setAction(action);
+
+        Bean bean = new ErrorMessageDecorator(radioButtonBean, model, textResource);
         bean.initBean();
         return bean;
     }
@@ -54,8 +56,8 @@ public class BeanFactory {
      * @param model the model
      * @return the file selection bean
      */
-    public FileSelectionBean createFileSelectionBean(FileModel model) {
-        FileSelectionBean bean = new FileSelectionBean(model);
+    public Bean createFileSelectionBean(FileModel model) {
+        Bean bean = new ErrorMessageDecorator(new FileSelectionBean(model), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -65,8 +67,23 @@ public class BeanFactory {
      * @param model the model
      * @return the combo box bean
      */
-    public <T> ComboBoxBean<T> createComboBoxBean(ListModel<T> model) {
-        ComboBoxBean<T> bean = new ComboBoxBean<T>(model);
+    public <T> Bean createComboBoxBean(ListModel<T> model) {
+        ComboBoxBean<T> comboBoxBean = new ComboBoxBean<>(model);
+        Bean bean = new ErrorMessageDecorator(comboBoxBean, model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
+     * Creates a combo box bean for the specified model.
+     * @param model the model
+     * @param itemFormatter generates a string for each item of the combo box
+     * @return the combo box bean
+     */
+    public <T> Bean createComboBoxBean(ListModel<T> model, ObjectFormatter<T> itemFormatter) {
+        ComboBoxBean<T> comboBoxBean = new ComboBoxBean<>(model);
+        comboBoxBean.setItemFormatter(itemFormatter);
+        Bean bean = new ErrorMessageDecorator(comboBoxBean, model, textResource);
         bean.initBean();
         return bean;
     }
@@ -76,8 +93,8 @@ public class BeanFactory {
      * @param model the string model
      * @return the text field bean
      */
-    public TextFieldBean createTextFieldBean(StringModel model) {
-        TextFieldBean bean = new TextFieldBean(model, textResource);
+    public Bean createTextFieldBean(StringModel model) {
+        Bean bean = new ErrorMessageDecorator(new TextFieldBean(model), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -88,8 +105,8 @@ public class BeanFactory {
      * @param nrColumns the number of columns
      * @return the text field bean
      */
-    public TextFieldBean createTextFieldBean(StringModel model, int nrColumns) {
-        TextFieldBean bean = new TextFieldBean(model, nrColumns, textResource);
+    public Bean createTextFieldBean(StringModel model, int nrColumns) {
+        Bean bean = new ErrorMessageDecorator(new TextFieldBean(model, nrColumns), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -100,8 +117,8 @@ public class BeanFactory {
      * @param nrColumns the number of columns
      * @return the password bean
      */
-    public PasswordBean createPasswordBean(StringModel model, int nrColumns) {
-        PasswordBean bean = new PasswordBean(model, nrColumns, textResource);
+    public Bean createPasswordBean(StringModel model, int nrColumns) {
+        Bean bean = new ErrorMessageDecorator(new PasswordBean(model, nrColumns), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -111,8 +128,8 @@ public class BeanFactory {
      * @param model the double model
      * @return the double field bean
      */
-    public DoubleFieldBean createDoubleFieldBean(DoubleModel model) {
-        DoubleFieldBean bean = new DoubleFieldBean(model, textResource);
+    public Bean createDoubleFieldBean(DoubleModel model) {
+        Bean bean = new ErrorMessageDecorator(new DoubleFieldBean(model), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -123,8 +140,8 @@ public class BeanFactory {
      * @param nrColumns the number of columns
      * @return the text field bean
      */
-    public DoubleFieldBean createDoubleFieldBean(DoubleModel model, int nrColumns) {
-        DoubleFieldBean bean = new DoubleFieldBean(model, nrColumns, textResource);
+    public Bean createDoubleFieldBean(DoubleModel model, int nrColumns) {
+        Bean bean = new ErrorMessageDecorator(new DoubleFieldBean(model, nrColumns), model, textResource);
         bean.initBean();
         return bean;
     }
@@ -134,8 +151,8 @@ public class BeanFactory {
      * @param model the date model
      * @return the date field bean
      */
-    public DateSelectionBean createDateSelectionBean(DateModel model) {
-        DateSelectionBean bean = new DateSelectionBean(model, textResource);
+    public Bean createDateSelectionBean(DateModel model) {
+        Bean bean = new ErrorMessageDecorator(new DateSelectionBean(model), model, textResource);
         bean.initBean();
         return bean;
     }

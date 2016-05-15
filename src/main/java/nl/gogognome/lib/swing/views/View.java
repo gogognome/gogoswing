@@ -1,6 +1,6 @@
 package nl.gogognome.lib.swing.views;
 
-import java.awt.Window;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +75,15 @@ public abstract class View extends JPanel implements Closeable {
      */
     JButton getDefaultButton() {
         return defaultButton;
+    }
+
+    /**
+     * Override this method to specifiy the minimum size of the view.
+     * By default, this method returns null.
+     * @return the minimum size or null if the minimum size is not specified.
+     */
+    public Dimension getMinimumSize() {
+        return null;
     }
 
     /**
