@@ -45,6 +45,10 @@ public class ErrorMessageDecorator implements Bean {
         decoratedBean.initBean();
     }
 
+    public Bean getDecoratedBean() {
+        return decoratedBean;
+    }
+
     @Override
     public JComponent getComponent() {
         return panel;

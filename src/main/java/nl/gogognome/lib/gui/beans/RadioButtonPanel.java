@@ -15,29 +15,32 @@ import nl.gogognome.lib.util.Factory;
  */
 public class RadioButtonPanel extends JPanel implements Closeable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ButtonGroup buttonGroup = new ButtonGroup();
+    private ButtonGroup buttonGroup = new ButtonGroup();
 
-	private BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
+    private BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
 
-	public RadioButtonPanel() {
-		setLayout(new GridBagLayout());
-	}
+    public RadioButtonPanel() {
+        setLayout(new GridBagLayout());
+    }
 
-	public void addRadioButton(String id, BooleanModel model) {
-		Bean bean = beanFactory.createRadioButtonBean(id, model);
-		add(bean.getComponent(), SwingUtils.createTextFieldGBConstraints(0, getComponentCount()));
-		buttonGroup.add((AbstractButton) bean.getComponent());
-	}
+    public void addRadioButton(String id, BooleanModel model) {
+        Bean bean = beanFactory.createRadioButtonBean(id, model);
+        add(bean.getComponent(), SwingUtils.createTextFieldGBConstraints(0, getComponentCount()));
+        JComponent button = bean instanceof ErrorMessageDecorator ?
+                ((ErrorMessageDecorator) bean).getDecoratedBean().getComponent() :
+                bean.getComponent();
+        buttonGroup.add((AbstractButton) button);
+    }
 
-	@Override
-	public void close() {
-		for (int i=0; i<getComponentCount(); i++) {
-			Component c = getComponent(i);
-			if (c instanceof Closeable) {
-				((Closeable) c).close();
-			}
-		}
-	}
+    @Override
+    public void close() {
+        for (int i=0; i<getComponentCount(); i++) {
+            Component c = getComponent(i);
+            if (c instanceof Closeable) {
+                ((Closeable) c).close();
+            }
+        }
+    }
 }
