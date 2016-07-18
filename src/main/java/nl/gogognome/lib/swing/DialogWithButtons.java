@@ -131,8 +131,8 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
 
         // The buttons are added to a ButtonPanel.
         ButtonPanel buttonPanel = new ButtonPanel(SwingConstants.CENTER);
-        for (int i=0; i<buttons.length; i++) {
-            buttonPanel.add(buttons[i]);
+        for (JButton button : buttons) {
+            buttonPanel.add(button);
         }
 
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
