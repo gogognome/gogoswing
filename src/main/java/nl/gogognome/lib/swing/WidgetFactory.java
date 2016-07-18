@@ -3,6 +3,7 @@ package nl.gogognome.lib.swing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -11,22 +12,10 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -108,6 +97,24 @@ public class WidgetFactory {
         }
 
         return action;
+    }
+
+	/**
+	 * Creates a button.
+	 * @param id the id of the button's description in the resources.
+	 * @param action the action to be performed when the button is pressed
+	 * @return the button.
+	 */
+	public JButton createButton(String id, Runnable action) {
+	    ActionWrapper actionWrapper = createAction(id);
+	    actionWrapper.setAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                action.run();
+            }
+        });
+
+        return new JButton(actionWrapper);
     }
 
 	/**
