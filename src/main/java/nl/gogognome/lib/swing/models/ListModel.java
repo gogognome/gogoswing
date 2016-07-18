@@ -2,14 +2,14 @@ package nl.gogognome.lib.swing.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * This class implements a model for a list of items.
  */
-public class ListModel<T> extends AbstractModel {
+public class ListModel<T> extends AbstractModel<List<T>> {
 
-    private List<T> items;
     private int[] selectedIndices = new int[0];
     private boolean mustBeFilled;
 
@@ -17,7 +17,7 @@ public class ListModel<T> extends AbstractModel {
     }
 
     public ListModel(List<T> items) {
-        setItems(items);
+        super(items);
     }
 
     public ListModel<T> mustBeFilled(boolean mustBeFilled) {
@@ -29,19 +29,19 @@ public class ListModel<T> extends AbstractModel {
      * Sets the items for the list model.
      * @param items the items
      */
-    public void setItems(List<T> items) {
-        setItems(items, null);
+    public ListModel<T> setItems(List<T> items) {
+        setValue(items);
+        return this;
     }
 
     /**
      * Sets the items for the list model.
      * @param items the items
-     * @param source the model change listener that sets the items.  It will not
-     *        get notified. It may be null.
+     * @param source the model change listener that sets the items. It will not get notified. It may be null.
      */
-    public void setItems(List<T> items, ModelChangeListener source) {
-        this.items = new ArrayList<T>(items);
-        notifyListeners(source);
+    public ListModel<T> setItems(List<T> items, ModelChangeListener source) {
+        setValue(items, source);
+        return this;
     }
 
     /**
@@ -51,12 +51,12 @@ public class ListModel<T> extends AbstractModel {
      *        get notified. It may be null.
      */
     public void addItem(T item, ModelChangeListener source) {
-        items.add(item);
+        getValue().add(item);
         notifyListeners(source);
     }
 
     public List<T> getItems() {
-        return items;
+        return Collections.unmodifiableList(getValue());
     }
 
     /**
@@ -112,7 +112,7 @@ public class ListModel<T> extends AbstractModel {
      */
     public T getSelectedItem() {
         if (selectedIndices.length == 1) {
-            return items.get(selectedIndices[0]);
+            return getValue().get(selectedIndices[0]);
         } else {
             return null;
         }
@@ -125,7 +125,7 @@ public class ListModel<T> extends AbstractModel {
      *        get notified. It may be <code>null</code>.
      */
     public void setSelectedItem(T item, ModelChangeListener source) {
-        int index = items.indexOf(item);
+        int index = getValue().indexOf(item);
         int[] indices = index == -1 ? new int[0] : new int[] { index };
         setSelectedIndices(indices, source);
     }
@@ -137,7 +137,7 @@ public class ListModel<T> extends AbstractModel {
     public List<T> getSelectedItems() {
         List<T> list = new ArrayList<T>();
         for (int index : selectedIndices) {
-            list.add(items.get(index));
+            list.add(getValue().get(index));
         }
         return list;
     }

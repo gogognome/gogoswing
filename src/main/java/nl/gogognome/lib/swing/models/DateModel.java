@@ -2,46 +2,38 @@ package nl.gogognome.lib.swing.models;
 
 import java.util.Date;
 
-import nl.gogognome.lib.util.ComparatorUtil;
-
 /**
- * This class implements a model for a <code>Date</code>.
+ * This class implements a model for a Date.
  */
-public class DateModel extends AbstractModel {
-
-    private Date date;
+public class DateModel extends AbstractModel<Date> {
 
     public DateModel() {
-    	this(null);
     }
 
     public DateModel(Date date) {
-    	this.date = date;
+    	setDate(date);
     }
 
     public Date getDate() {
-        return date;
+        return getValue();
     }
 
     /**
      * Sets the date of this model.
      * @param newDate the new value of the date
      */
-    public void setDate(Date newDate) {
-    	setDate(newDate, null);
+    public DateModel setDate(Date newDate) {
+    	setValue(newDate);
+        return this;
     }
 
     /**
      * Sets the date of this model.
      * @param newDate the new value of the date
-     * @param source the model change listener that sets the date. It will not
-     *         get notified. It may be <code>null</code>.
+     * @param source the model change listener that sets the date. It will not get notified. It may be null.
      */
-    public void setDate(Date newDate, ModelChangeListener source) {
-        Date oldDate = this.date;
-        if (!ComparatorUtil.equals(oldDate, newDate)) {
-            this.date = newDate;
-            notifyListeners(source);
-        }
+    public DateModel setDate(Date newDate, ModelChangeListener source) {
+        setValue(newDate, source);
+        return this;
     }
 }

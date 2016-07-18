@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class ErrorMessageDecorator implements Bean {
 
-    private final AbstractModel model;
+    private final AbstractModel<?> model;
     private ModelChangeListener modelChangeListener;
     private final TextResource textResource;
 
@@ -19,7 +19,7 @@ public class ErrorMessageDecorator implements Bean {
     private JPanel panel;
     private JLabel errorMessages;
 
-    public ErrorMessageDecorator(Bean decoratedBean, AbstractModel model, TextResource textResource) {
+    public ErrorMessageDecorator(Bean decoratedBean, AbstractModel<?> model, TextResource textResource) {
         this.decoratedBean = decoratedBean;
         this.model = model;
         this.textResource = textResource;
@@ -60,7 +60,7 @@ public class ErrorMessageDecorator implements Bean {
         decoratedBean.close();
     }
 
-    private void updateErrorMessages(AbstractModel model) {
+    private void updateErrorMessages(AbstractModel<?> model) {
         String newErrorMessages = formatErrorMessages(model);
         String oldErrorMessages = errorMessages.getText();
         if (oldErrorMessages == null || !oldErrorMessages.equals(newErrorMessages)) {
@@ -70,8 +70,8 @@ public class ErrorMessageDecorator implements Bean {
         errorMessages.setVisible(newErrorMessages != null);
     }
 
-    private String formatErrorMessages(AbstractModel model) {
-        String newErrorMessages = model.getErrorResourceIds().stream().map(textResource::getString).reduce((t, u) -> t + ' ' + u).orElse(null);
+    private String formatErrorMessages(AbstractModel<?> model) {
+        String newErrorMessages = model.getErrorResourceIds().stream().map(id -> textResource.getString(id)).reduce((t, u) -> t + ' ' + u).orElse(null);
         if (newErrorMessages != null && newErrorMessages.isEmpty()) {
             newErrorMessages = null;
         }

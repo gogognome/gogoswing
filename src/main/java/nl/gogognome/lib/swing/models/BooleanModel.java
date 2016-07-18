@@ -2,35 +2,34 @@ package nl.gogognome.lib.swing.models;
 
 
 /**
- * This class implements a model for a <code>Boolean</code>.
+ * This class implements a model for a boolean.
  */
-public class BooleanModel extends AbstractModel {
+public class BooleanModel extends AbstractModel<Boolean> {
 
-    private boolean value;
+    public BooleanModel() {
+        super(false);
+    }
 
     public boolean getBoolean() {
-        return value;
+        return getValue();
     }
 
     /**
      * Sets the boolean of this model.
      * @param newValue the new value of the boolean
      */
-    public void setBoolean(boolean newValue) {
-    	setBoolean(newValue, null);
+    public BooleanModel setBoolean(boolean newValue) {
+    	setValue(newValue);
+        return this;
     }
 
     /**
      * Sets the boolean of this model.
      * @param newValue the new value of the boolean
-     * @param source the model change listener that sets the boolean. It will not
-     *         get notified. It may be <code>null</code>.
+     * @param source the model change listener that sets the boolean. It will not get notified. It may be null.
      */
-    public void setBoolean(boolean newValue, ModelChangeListener source) {
-        boolean oldValue = this.value;
-        if (oldValue != newValue) {
-            this.value = newValue;
-            notifyListeners(source);
-        }
+    public BooleanModel setBoolean(boolean newValue, ModelChangeListener source) {
+        setValue(newValue, source);
+        return this;
     }
 }

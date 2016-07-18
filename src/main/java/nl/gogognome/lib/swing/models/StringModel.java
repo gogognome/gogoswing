@@ -1,17 +1,14 @@
 package nl.gogognome.lib.swing.models;
 
-import nl.gogognome.lib.util.ComparatorUtil;
-
 /**
- * This class implements a model for a <code>String</code>.
+ * This class implements a model for a String.
  */
-public class StringModel extends AbstractModel {
+public class StringModel extends AbstractModel<String> {
 
-    private String string;
     private boolean mustBeFilled;
 
     public String getString() {
-        return string;
+        return getValue();
     }
 
     public StringModel mustBeFilled(boolean mustBeFilled) {
@@ -24,7 +21,7 @@ public class StringModel extends AbstractModel {
      * @param newString the new value of the string
      */
     public StringModel setString(String newString) {
-    	setString(newString, null);
+    	setValue((newString));
         return this;
     }
 
@@ -32,20 +29,16 @@ public class StringModel extends AbstractModel {
      * Sets the string of this model.
      * @param newString the new value of the string
      * @param source the model change listener that sets the string. It will not
-     *         get notified. It may be <code>null</code>.
      */
-    public void setString(String newString, ModelChangeListener source) {
-        String oldString = this.string;
-        if (!ComparatorUtil.equals(oldString, newString)) {
-            this.string = newString;
-            notifyListeners(source);
-        }
+    public StringModel setString(String newString, ModelChangeListener source) {
+        setValue(newString, source);
+        return this;
     }
 
     @Override
     public boolean validate() {
         errorResourceIds.clear();
-        if (mustBeFilled && (string == null || string.isEmpty())) {
+        if (mustBeFilled && (getValue() == null || getValue().isEmpty())) {
             errorResourceIds.add("validation.fieldMustBeFilledIn");
         }
         notifyListeners(null);
