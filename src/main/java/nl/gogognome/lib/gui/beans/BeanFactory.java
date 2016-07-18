@@ -1,6 +1,6 @@
 package nl.gogognome.lib.gui.beans;
 
-import javax.swing.Action;
+import javax.swing.*;
 
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.swing.models.BooleanModel;
@@ -95,6 +95,19 @@ public class BeanFactory {
      */
     public Bean createTextFieldBean(StringModel model) {
         Bean bean = new ErrorMessageDecorator(new TextFieldBean(model), model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
+     * Creates a right aligned text field bean for the specified string model.
+     * @param model the string model
+     * @return the text field bean
+     */
+    public Bean createRightAlignedTextFieldBean(StringModel model) {
+        TextFieldBean textFieldBean = new TextFieldBean(model);
+        textFieldBean.setHorizontalAlignment(JTextField.RIGHT);
+        Bean bean = new ErrorMessageDecorator(textFieldBean, model, textResource);
         bean.initBean();
         return bean;
     }

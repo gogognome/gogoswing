@@ -1,18 +1,16 @@
 package nl.gogognome.lib.gui.beans;
 
-import java.awt.*;
-import java.awt.event.FocusListener;
-import java.text.ParseException;
+import nl.gogognome.lib.swing.SwingUtils;
+import nl.gogognome.lib.swing.models.AbstractModel;
+import nl.gogognome.lib.swing.models.ModelChangeListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import nl.gogognome.lib.swing.SwingUtils;
-import nl.gogognome.lib.swing.models.AbstractModel;
-import nl.gogognome.lib.swing.models.ModelChangeListener;
-import nl.gogognome.lib.text.TextResource;
+import java.awt.*;
+import java.awt.event.FocusListener;
+import java.text.ParseException;
 
 /**
  * Base class for a text field bean. Make sure that after instantiation
@@ -23,6 +21,7 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 	protected M model;
     private ModelChangeListener modelChangeListener;
 
+    private int horizontalAlignment = JTextField.LEFT;
     private int nrColumns;
     private JTextField textfield;
     private DocumentListener documentListener;
@@ -46,12 +45,20 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     	this.nrColumns = nrColumns;
     }
 
+    public void setHorizontalAlignment(int horizontalAlignment) {
+        this.horizontalAlignment = horizontalAlignment;
+        if (textfield != null) {
+            textfield.setHorizontalAlignment(horizontalAlignment);
+        }
+    }
+
     @Override
 	public void initBean() {
         setOpaque(false);
         setLayout(new GridBagLayout());
 
         textfield = createTextField(nrColumns);
+        textfield.setHorizontalAlignment(horizontalAlignment);
 
         updateTextField();
         modelChangeListener = m -> updateTextField();
