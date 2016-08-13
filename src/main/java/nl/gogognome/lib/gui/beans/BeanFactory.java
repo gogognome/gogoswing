@@ -169,4 +169,15 @@ public class BeanFactory {
         bean.initBean();
         return bean;
     }
+
+    /**
+     * Creates a label.
+     * @param model the model that controle the contents of the label
+     * @return the label bean
+     */
+    public Bean createLabel(StringModel model) {
+        Bean bean = new ErrorMessageDecorator(new LabelBean(model), model, textResource);
+        bean.initBean();
+        return bean;
+    }
 }

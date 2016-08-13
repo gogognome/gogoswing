@@ -27,7 +27,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
 
 	private static final long serialVersionUID = 1L;
 
-	protected List<Component> components = new ArrayList<Component>();
+	protected List<Component> components = new ArrayList<>();
     private BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
 
     public AbstractInputFieldsPanel() {
@@ -47,6 +47,16 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
     		}
     	}
     }
+
+    /**
+     * Adds a field to edit a string.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     */
+    public void addReadonlyField(String labelId, StringModel model) {
+        addVariableSizeField(labelId, beanFactory.createLabel(model).getComponent());
+    }
+
 
     /**
      * Adds a field to edit a string.
