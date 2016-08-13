@@ -11,6 +11,20 @@ public class StringModel extends AbstractModel<String> {
         return getValue();
     }
 
+    /**
+     * Constructs a string model without initial value.
+     */
+    public StringModel() {
+    }
+
+    /**
+     * Constructs a string model.
+     * @param initialValue the inital value of the string model.
+     */
+    public StringModel(String initialValue) {
+        setString(initialValue);
+    }
+
     public StringModel mustBeFilled(boolean mustBeFilled) {
         this.mustBeFilled = mustBeFilled;
         return this;
