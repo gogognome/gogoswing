@@ -8,5 +8,5 @@ public interface Closeable {
 	/**
 	 * Call this method to close the component. The component can free its resources.
 	 */
-	public void close();
+	void close();
 }
