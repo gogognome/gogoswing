@@ -1,6 +1,7 @@
 package nl.gogognome.lib.swing;
 
 import java.util.Comparator;
+import java.util.function.Function;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -10,8 +11,10 @@ import nl.gogognome.lib.util.Factory;
 
 /**
  * This class defines a column in a table.
+ *
+ * @param <R> the type of the row
  */
-public class ColumnDefinition {
+public class ColumnDefinition<R> {
 
     /** The identifier for the name of the column. */
     private String id;
@@ -41,14 +44,17 @@ public class ColumnDefinition {
     private Comparator<Object> comparator;
 
     /**
+     * Function that gets the value for this column from a row object.
+     */
+    private Function<R, Object> getValueForColumn;
+
+    /**
      * Constructor.
      * @param id the id of the column's name
      * @param classOfValues the class to which all values of the column belong
      * @param widthInPixels the column width in pixels
      */
-    public ColumnDefinition(String id, Class<?> classOfValues,
-            int widthInPixels) {
-        super();
+    public ColumnDefinition(String id, Class<?> classOfValues, int widthInPixels) {
         this.id = id;
         this.classOfValues = classOfValues;
         this.widthInPixels = widthInPixels;
@@ -78,34 +84,47 @@ public class ColumnDefinition {
         return comparator;
     }
 
+    public Object getValueForColumn(R row) {
+        return getValueForColumn.apply(row);
+    }
+
+    public static <R> Builder<R> builder(String id, Class<?> classOfValues, int widthInPixels) {
+        return new Builder(id, classOfValues, widthInPixels);
+    }
+
+
     /**
      * A builder for creating {@link ColumnDefinition}s.
      */
-    public static class Builder {
+    public static class Builder<R> {
 
-    	private ColumnDefinition columnDefinition;
+    	private ColumnDefinition<R> columnDefinition;
 
-        public Builder(String id, Class<?> classOfValues,
-                int widthInPixels) {
+        public Builder(String id, Class<?> classOfValues, int widthInPixels) {
         	columnDefinition = new ColumnDefinition(id, classOfValues, widthInPixels);
         }
 
-        public Builder add(TableCellRenderer tableCellRenderer) {
+        public Builder<R> add(TableCellRenderer tableCellRenderer) {
         	columnDefinition.tableCellRenderer = tableCellRenderer;
         	return this;
         }
 
-        public Builder add(TableCellEditor tableCellEditor) {
+        public Builder<R> add(TableCellEditor tableCellEditor) {
         	columnDefinition.tableCellEditor = tableCellEditor;
         	return this;
         }
 
-        public Builder add(Comparator<Object> comparator) {
+        public Builder<R> add(Comparator<Object> comparator) {
         	columnDefinition.comparator = comparator;
         	return this;
         }
 
-        public ColumnDefinition build() {
+        public Builder<R> add(Function<R, Object> getValueForColumn) {
+        	columnDefinition.getValueForColumn = getValueForColumn;
+        	return this;
+        }
+
+        public ColumnDefinition<R> build() {
         	return columnDefinition;
         }
     }

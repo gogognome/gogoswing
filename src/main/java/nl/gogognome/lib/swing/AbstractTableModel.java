@@ -1,26 +1,39 @@
 package nl.gogognome.lib.swing;
 
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
+import static java.util.Arrays.asList;
 
 /**
  * Abstract class for table model implementations. This class
  * uses ColumnDefinitions to define the table columns.
+ *
+ * @param <R> the type of a row
  */
-public abstract class AbstractTableModel extends javax.swing.table.AbstractTableModel {
+public abstract class AbstractTableModel<R> extends javax.swing.table.AbstractTableModel {
 
     /** The column definitions. */
-    private List<ColumnDefinition> columnDefinitions;
+    private List<ColumnDefinition<R>> columnDefinitions;
+
+    /** Constructs a table model without column definitions. Make sure to set the column definitions. */
+    public AbstractTableModel() {}
 
     /**
      * Constructor.
      * @param columnDefinitions the column definitions
      */
-    public AbstractTableModel(List<ColumnDefinition> columnDefinitions) {
-        super();
+    public AbstractTableModel(List<ColumnDefinition<R>> columnDefinitions) {
+        this.columnDefinitions = columnDefinitions;
+    }
+
+    public void setColumnDefinitions(ColumnDefinition<R>... columnDefinitions) {
+        setColumnDefinitions(asList(columnDefinitions));
+    }
+
+    public void setColumnDefinitions(List<ColumnDefinition<R>> columnDefinitions) {
         this.columnDefinitions = columnDefinitions;
     }
 
@@ -60,7 +73,7 @@ public abstract class AbstractTableModel extends javax.swing.table.AbstractTable
      * @param column the index of the column
      * @return the column definition
      */
-    public ColumnDefinition getColumnDefinition(int column) {
+    public ColumnDefinition<R> getColumnDefinition(int column) {
         return columnDefinitions.get(column);
     }
 

@@ -2,23 +2,17 @@ package nl.gogognome.lib.swing;
 
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
-public class AbstractListTableModelTest {
+public class ListTableModelTest {
 
-    private final static ColumnDefinition COLUMN = new ColumnDefinition("editInvoiceView.tableHeader.descriptions", String.class, 300);
-
-    private AbstractListTableModel<String> tableModel = new AbstractListTableModel<String>(
-            Collections.singletonList(COLUMN),
+    private ListTableModel<String> tableModel = new ListTableModel<String>(
+            singletonList(ColumnDefinition.<String>builder("editInvoiceView.tableHeader.descriptions", String.class, 300)
+                    .add(row -> row)
+                    .build()),
             asList("one", "two", "three")) {
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            return getRow(rowIndex);
-        }
     };
 
     @Test
@@ -69,7 +63,7 @@ public class AbstractListTableModelTest {
 
     @Test
     public void testReplaceRows() {
-        tableModel.replaceRows(asList("ONE", "TWO"));
+        tableModel.setRows(asList("ONE", "TWO"));
 
         assertTableModelContains("ONE", "TWO");
     }

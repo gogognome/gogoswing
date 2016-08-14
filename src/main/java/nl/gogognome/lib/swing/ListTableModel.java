@@ -5,25 +5,50 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
- * Abstract class for table model implementations. This class
- * uses ColumnDefinitions to define the table columns. In addition it stores
+ * This class uses ColumnDefinitions to define the table columns. In addition it stores
  * the rows of the table model in a list. This class offers methods to modify the list.
  * Modifications of the list are signaled the registered TableModelListeners.
  *
- * @param <T> the type of rows
+ * @param <R> the type of rows
  */
-public abstract class AbstractListTableModel<T> extends AbstractTableModel {
-    private List<T> rows;
+public class ListTableModel<R> extends AbstractTableModel<R> {
+
+    private final List<R> rows = new ArrayList<>();
+
+    /**
+     * Constructor.
+     */
+    public ListTableModel() {
+        super();
+    }
+
+    /**
+     * Constructor.
+     * @param columnDefinitions the column definitions
+     */
+    public ListTableModel(ColumnDefinition<R>... columnDefinitions) {
+        this(asList(columnDefinitions));
+    }
+
+    /**
+     * Constructor.
+     * @param columnDefinitions the column definitions
+     */
+    public ListTableModel(List<ColumnDefinition<R>> columnDefinitions) {
+        super(columnDefinitions);
+    }
 
     /**
      * Constructor.
      * @param columnDefinitions the column definitions
      * @param initialRows the initial rows
      */
-    public AbstractListTableModel(List<ColumnDefinition> columnDefinitions, List<T> initialRows) {
+    public ListTableModel(List<ColumnDefinition<R>> columnDefinitions, List<R> initialRows) {
         super(columnDefinitions);
-        rows = new ArrayList<>(initialRows);
+        rows.addAll(initialRows);
     }
 
     @Override
@@ -37,7 +62,7 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
      * This method must be called from the AWT event thread.
      * @param row the row
      */
-    public void addRow(T row) {
+    public void addRow(R row) {
         rows.add(row);
         fireTableRowsInserted(rows.size() - 1, rows.size() - 1);
     }
@@ -87,7 +112,7 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
      * @param index the index of the row
      * @param row the new value of the row
      */
-    public void updateRow(int index, T row) {
+    public void updateRow(int index, R row) {
         rows.set(index, row);
         fireTableRowsUpdated(index, index);
     }
@@ -96,7 +121,7 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
      * Updates all rows of the table.
      * @param newRows the new rows
      */
-    public void replaceRows(List<T> newRows) {
+    public void setRows(List<R> newRows) {
         rows.clear();
         rows.addAll(newRows);
         fireTableDataChanged();
@@ -107,7 +132,7 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
      * @param index the index of the row
      * @return the row
      */
-    public T getRow(int index) {
+    public R getRow(int index) {
         return rows.get(index);
     }
 
@@ -116,7 +141,14 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
      *
      * @return an unmodifiable list of rows
      */
-    public List<T> getRows() {
+    public List<R> getRows() {
         return Collections.unmodifiableList(rows);
     }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        ColumnDefinition<R> columnDefinition = getColumnDefinition(columnIndex);
+        return columnDefinition.getValueForColumn(getRow(rowIndex));
+    }
+
 }
