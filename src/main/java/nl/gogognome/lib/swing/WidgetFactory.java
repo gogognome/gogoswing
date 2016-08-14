@@ -1,18 +1,10 @@
 package nl.gogognome.lib.swing;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import nl.gogognome.lib.swing.action.ActionWrapper;
+import nl.gogognome.lib.text.TextResource;
+import nl.gogognome.lib.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,18 +12,15 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableRowSorter;
-
-import nl.gogognome.lib.swing.action.ActionWrapper;
-import nl.gogognome.lib.text.TextResource;
-import nl.gogognome.lib.util.Factory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is a factory for buttons, menus, menu items, text fields and
@@ -44,8 +33,8 @@ public class WidgetFactory {
     /** The <code>TextResource</code> used to obtain string resources. */
     private TextResource textResource;
 
-    private Map<String, Icon> iconCache = new HashMap<String, Icon>();
-    private Map<String, Image> imageCache = new HashMap<String, Image>();
+    private Map<String, Icon> iconCache = new HashMap<>();
+    private Map<String, Image> imageCache = new HashMap<>();
 
     public WidgetFactory(TextResource textResource)
     {
@@ -83,7 +72,7 @@ public class WidgetFactory {
         s = textResource.getString(id + ".mnemonic");
         int mnemonic = getMnemonic(id);
         if (mnemonic != -1) {
-            action.putValue(Action.MNEMONIC_KEY, new Integer(mnemonic));
+            action.putValue(Action.MNEMONIC_KEY, mnemonic);
         }
 
         s = textResource.getString(id + ".tooltip");
@@ -182,8 +171,7 @@ public class WidgetFactory {
      * @return the text field.
      */
     public JTextField createTextField() {
-        JTextField textField = new JTextField();
-        return textField;
+        return new JTextField();
     }
 
     /**
@@ -209,8 +197,7 @@ public class WidgetFactory {
      */
     public JTextField createTextField(String text)
     {
-        JTextField textField = new JTextField(text);
-        return textField;
+        return new JTextField(text);
     }
 
     /**
@@ -221,9 +208,7 @@ public class WidgetFactory {
      * @return the check box.
      */
     public JCheckBox createCheckBox(String textId, boolean checked) {
-        JCheckBox checkBox = new JCheckBox(
-            textResource.getString(textId), checked);
-        return checkBox;
+        return new JCheckBox(textResource.getString(textId), checked);
     }
 
     /**
@@ -282,9 +267,8 @@ public class WidgetFactory {
     public JComboBox createComboBox(String[] ids)
     {
         JComboBox result = new JComboBox();
-        for (int i = 0; i < ids.length; i++)
-        {
-            result.addItem(textResource.getString(ids[i]));
+        for (String id : ids) {
+            result.addItem(textResource.getString(id));
         }
         return result;
     }
@@ -388,70 +372,6 @@ public class WidgetFactory {
     public Border createTitleBorderWithMarginAndPadding(String titleId) {
         return new CompoundBorder(new EmptyBorder(10, 10, 10, 10),
             createTitleBorderWithPadding(titleId));
-    }
-
-    /**
-     * Creates a non-sortable table based on the specified table model.
-     * The columns of the table are defined by the ColumnDefinitions
-     * of the table model.
-     * @param tableModel the table model
-     * @return the table
-     */
-    public JTable createTable(AbstractTableModel tableModel) {
-        JTable table = new JTable(tableModel);
-        initTableColumns(table, tableModel);
-        return table;
-    }
-
-    /**
-     * Creates a sortable table based on the specified table model.
-     * The columns of the table are defined by the ColumnDefinitions
-     * of the table model.
-     * @param tableModel the table model
-     * @return the table
-     */
-    public JTable createSortedTable(AbstractTableModel tableModel) {
-        JTable table = new JTable(tableModel);
-        TableRowSorter<AbstractTableModel> sorter = new TableRowSorter<AbstractTableModel>(tableModel);
-        initTableColumns(table, tableModel);
-        initSorterForTableModel(sorter, tableModel);
-        table.setRowSorter(sorter);
-        return table;
-    }
-
-    private void initTableColumns(JTable table, AbstractTableModel tableModel) {
-        TableColumnModel columnModel = table.getColumnModel();
-        int nrCols = tableModel.getColumnCount();
-
-        for (int i=0; i<nrCols; i++) {
-            // Set column width
-            int colWidth = tableModel.getColumnWidth(i);
-            TableColumn column = columnModel.getColumn(i);
-            column.setPreferredWidth(colWidth);
-
-            // If present, set the table cell renderer
-            TableCellRenderer renderer = tableModel.getRendererForColumn(i);
-            if (renderer != null) {
-                column.setCellRenderer(renderer);
-            }
-
-            // If present, set the table cell editor
-            TableCellEditor editor = tableModel.getEditorForColumn(i);
-            if (editor != null) {
-                column.setCellEditor(editor);
-            }
-        }
-    }
-
-    private void initSorterForTableModel(TableRowSorter<AbstractTableModel> sorter,
-            AbstractTableModel tableModel) {
-        for (int c=0; c<tableModel.getColumnCount(); c++) {
-            ColumnDefinition colDef = tableModel.getColumnDefinition(c);
-            Comparator<?> comparator =  colDef.getComparator();
-            if (comparator != null) {
-                sorter.setComparator(c, comparator);
-            }
-        }
     }
 
     /**
