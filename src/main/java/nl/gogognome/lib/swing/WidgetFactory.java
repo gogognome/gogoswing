@@ -42,12 +42,34 @@ public class WidgetFactory {
     }
 
     /**
-     * Creates an <code>Action</code> for the specified identifier.
+     * Creates an <code>ActionWrapper</code> for the specified identifier.
+     * @param id the identifier
+     * @param runnable the runnable that is executed when the action is performed
+     * @return the <code>Action</code> or <code>null</code> if the specified
+     *          identifier does not occur in the resources.
+     */
+    public ActionWrapper createActionWrapper(String id, RunnableWithException runnable) {
+        ActionWrapper actionWrapper = createActionWrapper(id);
+        actionWrapper.setAction(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return actionWrapper;
+    }
+
+    /**
+     * Creates an <code>ActionWrapper</code> for the specified identifier.
      * @param id the identifier
      * @return the <code>Action</code> or <code>null</code> if the specified
      *          identifier does not occur in the resources.
      */
-    public ActionWrapper createAction(String id) {
+    public ActionWrapper createActionWrapper(String id) {
 
         String name = textResource.getString(id);
 
@@ -63,26 +85,25 @@ public class WidgetFactory {
             action = new ActionWrapper();
         }
 
-        String s = textResource.getString(id + ".accelerator");
-        KeyStroke accelerator = s != null ? KeyStroke.getKeyStroke(s) : null;
+        String acceleratorString = textResource.getString(id + ".accelerator");
+        KeyStroke accelerator = acceleratorString != null ? KeyStroke.getKeyStroke(acceleratorString) : null;
         if (accelerator != null) {
             action.putValue(Action.ACCELERATOR_KEY, accelerator);
         }
 
-        s = textResource.getString(id + ".mnemonic");
         int mnemonic = getMnemonic(id);
         if (mnemonic != -1) {
             action.putValue(Action.MNEMONIC_KEY, mnemonic);
         }
 
-        s = textResource.getString(id + ".tooltip");
-        if (s != null) {
-            action.putValue(Action.SHORT_DESCRIPTION, s);
+        String tooltip = textResource.getString(id + ".tooltip");
+        if (tooltip != null) {
+            action.putValue(Action.SHORT_DESCRIPTION, tooltip);
         }
 
-        s = textResource.getString(id + ".contexthelp");
-        if (s != null) {
-            action.putValue(Action.LONG_DESCRIPTION, s);
+        String contextHelp = textResource.getString(id + ".contexthelp");
+        if (contextHelp != null) {
+            action.putValue(Action.LONG_DESCRIPTION, contextHelp);
         }
 
         return action;
@@ -95,7 +116,7 @@ public class WidgetFactory {
 	 * @return the button.
 	 */
 	public JButton createButton(String id, Runnable action) {
-	    ActionWrapper actionWrapper = createAction(id);
+	    ActionWrapper actionWrapper = createActionWrapper(id);
 	    actionWrapper.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,7 +134,7 @@ public class WidgetFactory {
 	 * @return the button.
 	 */
 	public JButton createButton(String id, Action action) {
-	    ActionWrapper actionWrapper = createAction(id);
+	    ActionWrapper actionWrapper = createActionWrapper(id);
 	    actionWrapper.setAction(action);
 
         return new JButton(actionWrapper);

@@ -113,6 +113,17 @@ public class ButtonPanel extends JPanel implements Closeable {
 
     /**
      * Adds a button to this panel.
+	 * @param action the action to be performed when the button is pressed
+	 * @return the button.
+     */
+    public JButton addButton(Action action) {
+        JButton button = new JButton(action);
+        add(button);
+    	return button;
+    }
+
+    /**
+     * Adds a button to this panel.
 	 * @param id the id of the button's description in the resources.
 	 * @param action the action to be performed when the button is pressed
 	 * @return the button.

@@ -43,7 +43,7 @@ public class BeanFactory {
     public Bean createRadioButtonBean(String id, BooleanModel model) {
         RadioButtonBean radioButtonBean = new RadioButtonBean(model);
         WidgetFactory wf = Factory.getInstance(WidgetFactory.class);
-        Action action = wf.createAction(id);
+        Action action = wf.createActionWrapper(id);
         radioButtonBean.setAction(action);
 
         Bean bean = new ErrorMessageDecorator(radioButtonBean, model, textResource);
