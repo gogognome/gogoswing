@@ -32,7 +32,22 @@ public class ErrorMessageDecorator implements Bean {
         errorMessages.setForeground(Color.RED);
         errorMessages.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
-        panel = new JPanel();
+        panel = new JPanel() {
+            @Override
+            protected boolean requestFocusInWindow(boolean temporary) {
+                return decoratedBean.getComponent().requestFocus(temporary);
+            }
+
+            @Override
+            public boolean requestFocus(boolean temporary) {
+                return decoratedBean.getComponent().requestFocus(temporary);
+            }
+
+            @Override
+            public void requestFocus() {
+                decoratedBean.getComponent().requestFocus();
+            }
+        };
         panel.setLayout(new BorderLayout());
         panel.add(decoratedBean.getComponent(), BorderLayout.CENTER);
         panel.add(errorMessages, BorderLayout.EAST);
