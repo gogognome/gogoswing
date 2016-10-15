@@ -61,6 +61,7 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         textfield.setHorizontalAlignment(horizontalAlignment);
 
         updateTextField();
+        parseUserInput();
         modelChangeListener = m -> updateTextField();
         model.addModelChangeListener(modelChangeListener);
 
