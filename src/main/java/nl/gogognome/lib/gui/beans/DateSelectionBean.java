@@ -2,6 +2,7 @@ package nl.gogognome.lib.gui.beans;
 
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.AbstractAction;
@@ -20,14 +21,15 @@ import nl.gogognome.lib.util.Factory;
  */
 public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
 
-	private static final long serialVersionUID = 1L;
+    private final Calendar calendar;
 
     /**
      * Constructor.
      * @param dateModel the date model that will reflect the content of the bean
      */
-    protected DateSelectionBean(DateModel dateModel) {
+    protected DateSelectionBean(DateModel dateModel, Calendar calendar) {
     	super(dateModel, 10);
+        this.calendar = calendar;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class DateSelectionBean extends AbstractTextFieldBean<DateModel> {
     }
 
 	private void showCalendarPopup() {
-		CalendarView calendarPanel = new CalendarView(model);
+		CalendarView calendarPanel = new CalendarView(model, calendar);
 		ViewPopup viewPopup = new ViewPopup(calendarPanel);
 		viewPopup.show(this, SwingUtils.getCoordinatesRelativeToTopLevelContainer(this));
 	}

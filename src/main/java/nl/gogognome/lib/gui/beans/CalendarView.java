@@ -28,13 +28,11 @@ class CalendarView extends View implements ChangeListener {
 
     private static final long serialVersionUID = 1L;
 
-    private DateModel dateModel;
+    private final DateModel dateModel;
+    private final Calendar calendar;
 
     private JSpinner monthSpinner;
-
     private JSpinner yearSpinner;
-
-    private Calendar calendar;
 
     /** Contains the days shown in the calendar. */
     private int[][] days = new int[6][7];
@@ -48,8 +46,9 @@ class CalendarView extends View implements ChangeListener {
 
     private int currentDay;
 
-    public CalendarView(DateModel dateModel) {
+    public CalendarView(DateModel dateModel, Calendar calendar) {
         this.dateModel = dateModel;
+        this.calendar = calendar;
     }
 
     @Override
@@ -71,7 +70,6 @@ class CalendarView extends View implements ChangeListener {
     }
 
     private void initModels() {
-        calendar = Calendar.getInstance(textResource.getLocale());
         if (dateModel.getDate() != null) {
             calendar.setTime(dateModel.getDate());
         }
@@ -214,8 +212,6 @@ class CalendarView extends View implements ChangeListener {
         public void paint(Graphics g) {
             g.setColor(Color.BLACK);
 
-            int x = 0;
-            int y = 0;
             for (int i=0; i<7; i++) {
                 paintCell(g, 0, i, dayNames[i].substring(0, 1), Color.BLACK, Color.LIGHT_GRAY);
             }

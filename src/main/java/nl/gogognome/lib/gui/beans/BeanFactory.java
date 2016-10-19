@@ -12,6 +12,8 @@ import nl.gogognome.lib.swing.models.StringModel;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
+import java.util.Calendar;
+
 /**
  * This class is a factory for creating beans.
  */
@@ -165,7 +167,7 @@ public class BeanFactory {
      * @return the date field bean
      */
     public Bean createDateSelectionBean(DateModel model) {
-        Bean bean = new ErrorMessageDecorator(new DateSelectionBean(model), model, textResource);
+        Bean bean = new ErrorMessageDecorator(new DateSelectionBean(model, Calendar.getInstance(textResource.getLocale())), model, textResource);
         bean.initBean();
         return bean;
     }
