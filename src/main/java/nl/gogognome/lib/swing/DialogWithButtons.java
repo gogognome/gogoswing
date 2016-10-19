@@ -88,9 +88,9 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
      * @param buttonIds the ids of the buttons.
      */
     protected DialogWithButtons(View view, String titleId, String[] buttonIds) {
-        initDialog(new JDialog(view.getParentWindow(),
+        initDialog(new JDialog(view.getViewOwner().getWindow(),
                 Factory.getInstance(TextResource.class).getString(titleId), Dialog.ModalityType.APPLICATION_MODAL),
-            buttonIds, view.getParentWindow().getBounds());
+            buttonIds, view.getViewOwner().getWindow().getBounds());
     }
 
     /**
@@ -105,14 +105,14 @@ public abstract class DialogWithButtons implements ActionListener, KeyListener, 
         this.dialog = dialog;
         this.parentBounds = parentBounds;
         buttons = new JButton[buttonIds.length];
-        Action action = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actionPerformed(e);
-            }
-        };
         for (int i=0; i<buttonIds.length; i++) {
-            buttons[i] = Factory.getInstance(WidgetFactory.class).createButton(buttonIds[i], action);
+            final int index = i;
+            buttons[i] = Factory.getInstance(WidgetFactory.class).createButton(buttonIds[i], new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buttonPressed(index);
+                }
+            });
         }
         selectedButton = -1;
     }

@@ -103,7 +103,7 @@ public class ViewDialog {
             }
         };
 
-        view.setParentWindow(dialog);
+        view.setViewOwner(new JDialogViewOwner(dialog));
         view.setCloseAction(closeAction);
         view.doInit();
         dialog.getContentPane().add(view, BorderLayout.CENTER);

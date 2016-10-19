@@ -59,7 +59,7 @@ public class ViewContainer extends View {
     public void setView(View view) {
         removeView();
         this.view = view;
-        view.setParentWindow(getParentWindow());
+        view.setViewOwner(getViewOwner());
         view.setCloseAction(new AbstractAction() {
             @Override
 			public void actionPerformed(ActionEvent e) {

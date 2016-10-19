@@ -1,15 +1,5 @@
 package nl.gogognome.lib.swing.views;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.gui.beans.BeanFactory;
 import nl.gogognome.lib.swing.MessageDialog;
@@ -19,11 +9,15 @@ import nl.gogognome.lib.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A view represents a rectangular area inside a dialog or frame. A view typically
  * implements a cohesive part of the user interface.
  *
- * <p>Views can be made visible inside a dialog (see {@link ViewDialog}),
+ * <p>Views can be put inside a dialog (see {@link ViewDialog}),
  * a frame (see {@link ViewFrame}), tabbed pane (see {@link ViewTabbedPane}) and even
  * inside other views (see {@link ViewContainer}).
  *
@@ -55,7 +49,7 @@ public abstract class View extends JPanel implements Closeable {
      */
     protected Action closeAction;
 
-    private Window parentWindow;
+    private ViewOwner viewOwner;
     private JButton defaultButton;
 
     protected TextResource textResource = Factory.getInstance(TextResource.class);
@@ -94,12 +88,12 @@ public abstract class View extends JPanel implements Closeable {
         this.closeAction = closeAction;
     }
 
-    void setParentWindow(Window parentWindow) {
-        this.parentWindow = parentWindow;
+    void setViewOwner(ViewOwner viewOwner) {
+        this.viewOwner = viewOwner;
     }
 
-    public Window getParentWindow() {
-    	return parentWindow;
+    public ViewOwner getViewOwner() {
+    	return viewOwner;
     }
 
     public void addViewListener(ViewListener listener) {
@@ -116,11 +110,7 @@ public abstract class View extends JPanel implements Closeable {
      */
     public void setDefaultButton(JButton button) {
         defaultButton = button;
-        if (parentWindow instanceof JFrame) {
-            ((JFrame) parentWindow).getRootPane().setDefaultButton(button);
-        } else if (parentWindow instanceof JDialog) {
-        	((JDialog) parentWindow).getRootPane().setDefaultButton(button);
-        }
+        viewOwner.setDefaultButton(button);
     }
 
     /**

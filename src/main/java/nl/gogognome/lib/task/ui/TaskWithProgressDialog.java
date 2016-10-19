@@ -1,21 +1,13 @@
 package nl.gogognome.lib.task.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Window;
-
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
-
 import nl.gogognome.lib.swing.MessageDialog;
 import nl.gogognome.lib.swing.views.View;
+import nl.gogognome.lib.swing.views.ViewOwner;
 import nl.gogognome.lib.task.Task;
 import nl.gogognome.lib.task.TaskProgressListener;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class can execute a task and show the progress of the task in a dialog.
@@ -23,20 +15,20 @@ import nl.gogognome.lib.task.TaskProgressListener;
  */
 public class TaskWithProgressDialog implements TaskProgressListener {
 
-    private Window parentWindow;
+    private ViewOwner viewOwner;
 
     private JProgressBar progressBar;
     private JDialog progressDialog;
 
     private String description;
 
-    public TaskWithProgressDialog(Window parentWindow, String description) {
-    	this.parentWindow = parentWindow;
+    public TaskWithProgressDialog(ViewOwner viewOwner, String description) {
+    	this.viewOwner = viewOwner;
     	this.description = description;
     }
 
     public TaskWithProgressDialog(View view, String description) {
-    	this.parentWindow = view.getParentWindow();
+    	this.viewOwner = view.getViewOwner();
     	this.description = description;
     }
 
@@ -48,7 +40,7 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     public Object execute(Task task) {
     	WorkerThread thread = new WorkerThread(task, description, this);
     	thread.start();
-   		progressDialog = new JDialog(parentWindow);
+   		progressDialog = new JDialog(viewOwner.getWindow());
 
     	progressBar = new JProgressBar(0, 100);
     	JPanel panel = new JPanel(new BorderLayout());
@@ -62,8 +54,8 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     	progressDialog.setResizable(false);
 
     	// Put dialog in center of parent frame or dialog.
-    	Dimension d = parentWindow.getSize();;
-    	Point location = parentWindow.getLocation();
+    	Dimension d = viewOwner.getWindow().getSize();
+    	Point location = viewOwner.getWindow().getLocation();
     	location.translate((int)(d.getWidth() / 2), (int)(d.getHeight() / 2));
     	progressDialog.setLocation(location);
 
@@ -76,33 +68,25 @@ public class TaskWithProgressDialog implements TaskProgressListener {
     }
 
     public void onFinished(final Exception e) {
-    	SwingUtilities.invokeLater(new Runnable() {
-    		@Override
-			public void run() {
-    			progressDialog.setVisible(false);
-		    	if (e != null) {
-		            MessageDialog.showErrorMessage(parentWindow, e,
-		            		"taskWithProgressDialog.finishedWithException");
-		    	}
-    		}
-    	});
+    	SwingUtilities.invokeLater(() -> {
+            progressDialog.setVisible(false);
+            if (e != null) {
+                MessageDialog.showErrorMessage(viewOwner.getWindow(), e,
+                        "taskWithProgressDialog.finishedWithException");
+            }
+        });
     }
 
     @Override
 	public void onProgressUpdate(final int percentageCompleted) {
-    	SwingUtilities.invokeLater(new Runnable() {
-    		@Override
-			public void run() {
-    			progressBar.setValue(percentageCompleted);
-    		}
-    	});
+    	SwingUtilities.invokeLater(() -> progressBar.setValue(percentageCompleted));
     }
 
     private class WorkerThread extends Thread {
     	private TaskWithProgressDialog processDialog;
     	private Task task;
     	private Object result;
-    	private Object lock = new Object();
+    	private final Object lock = new Object();
 
 		public WorkerThread(Task task, String description, TaskWithProgressDialog progressListener) {
 			super("worker thread for \"" + description + '"');

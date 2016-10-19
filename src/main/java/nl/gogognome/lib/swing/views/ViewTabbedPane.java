@@ -1,50 +1,28 @@
 package nl.gogognome.lib.swing.views;
 
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import nl.gogognome.lib.swing.WidgetFactory;
 import nl.gogognome.lib.util.Factory;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 /**
  * This class implements a tabbed pane that can hold <code>View</code>s.
  */
 public class ViewTabbedPane extends JTabbedPane {
 
-    /** Contains the views that are added to this tabbed pane. */
-    private ArrayList<View> views = new ArrayList<View>();
-
-    /** The frame that contains this tabbed pane. */
-    private JFrame parentFrame;
+    private ArrayList<View> views = new ArrayList<>();
+    private ViewOwner viewOwner;
 
     private boolean changeInProgress;
 
-    /**
-     * Constructor.
-     * @param parentFrame the frame that contains this tabbed pane.
-     */
-    public ViewTabbedPane(JFrame parentFrame) {
-        super();
-        this.parentFrame = parentFrame;
-        model.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent changeEvent) {
-				userSelectedView();
-			}
-		});
+    public ViewTabbedPane(ViewOwner viewOwner) {
+        this.viewOwner = viewOwner;
+        model.addChangeListener(changeEvent1 -> userSelectedView());
     }
 
     /**
@@ -57,7 +35,7 @@ public class ViewTabbedPane extends JTabbedPane {
 	        Action closeAction = new CloseAction(view);
 
 	        view.setCloseAction(closeAction);
-	        view.setParentWindow(parentFrame);
+	        view.setViewOwner(viewOwner);
 	        view.doInit();
 	        addTab(view.getTitle(), view);
     		setTabComponentAt(getTabCount() - 1, new CloseableTab(view, closeAction));
@@ -106,8 +84,7 @@ public class ViewTabbedPane extends JTabbedPane {
     public void closeAllViews() {
     	changeInProgress = true;
     	try {
-	        for (Iterator<View> iter = views.iterator(); iter.hasNext();) {
-	            View view = iter.next();
+	        for (View view : views) {
 	            view.doClose();
 	            super.remove(view);
 	        }
