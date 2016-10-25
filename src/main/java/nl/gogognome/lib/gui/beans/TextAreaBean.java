@@ -49,7 +49,7 @@ public class TextAreaBean extends JPanel implements Bean {
     @Override
     public void initBean() {
         setOpaque(false);
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
 
         if (nrColumns == 0 || nrRows == 0) {
             textArea = new JTextArea();
@@ -65,8 +65,8 @@ public class TextAreaBean extends JPanel implements Bean {
         documentListener = new ParseUserInputOnDocumentChangeListener();
         textArea.getDocument().addDocumentListener(documentListener);
 
-        int fill = nrColumns == 0 ? (nrRows == 0 ? BOTH : HORIZONTAL) : (nrRows == 0 ? VERTICAL : NONE);
-        add(textArea, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0, WEST, fill, 0, 0, 0, 0));
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     private void updateTextAreaWithValuesFromModel() {
