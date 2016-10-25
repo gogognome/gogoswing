@@ -82,9 +82,6 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         return this;
     }
 
-    /**
-     * Deinitializes this bean. It will free its resources.
-     */
     @Override
 	public void close() {
         model.removeModelChangeListener(modelChangeListener);
