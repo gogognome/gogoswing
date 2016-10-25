@@ -66,7 +66,7 @@ public class ViewDialog {
         this.parentBounds = parentBounds;
         setView(view);
 
-        dialog.addWindowListener( new WindowAdapter() {
+        dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) { dispose(); } }
         );
@@ -84,7 +84,7 @@ public class ViewDialog {
             dialog.setMinimumSize(view.getMinimumSize());
         }
         dialog.pack();
-        Dimension d = dialog.getPreferredSize();
+        Dimension d = dialog.getSize();
         dialog.setLocation(parentBounds.x + (parentBounds.width-d.width)/2,
             parentBounds.y + (parentBounds.height-d.height)/2);
         dialog.setVisible(true);
