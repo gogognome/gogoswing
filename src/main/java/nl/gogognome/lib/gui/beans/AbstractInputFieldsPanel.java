@@ -79,6 +79,28 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
     }
 
     /**
+     * Adds a text area to edit a string.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text area
+     */
+    public void addTextArea(String labelId, StringModel model) {
+        addVariableSizeField(labelId, beanFactory.createTextAreaBean(model).getComponent());
+    }
+
+    /**
+     * Adds a text area to edit a string.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     * @param nrRows the height of the text field as the number of rows.
+     *        The value 0 indicates that the height can be determined by the layout manager.
+     */
+    public void addTextArea(String labelId, StringModel model, int nrColumns, int nrRows) {
+        addVariableSizeField(labelId, beanFactory.createTextAreaBean(model, nrColumns, nrRows).getComponent());
+    }
+
+    /**
      * Adds a field to edit a double.
      * @param labelId the id of the label that is put in front of the text field
      * @param model the model controlling the text field
@@ -134,8 +156,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      * @param component the component
      */
     public void addVariableSizeField(String labelId, JComponent component) {
-        addLabelAndFieldWithConstraints(labelId, component,
-        		getVariableSizeFieldConstraints());
+        addLabelAndFieldWithConstraints(labelId, component, getVariableSizeFieldConstraints());
     }
 
     /**

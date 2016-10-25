@@ -127,6 +127,30 @@ public class BeanFactory {
     }
 
     /**
+     * Creates a text area bean for the specified string model.
+     * @param model the string model
+     * @return the text area bean
+     */
+    public Bean createTextAreaBean(StringModel model) {
+        Bean bean = new ErrorMessageDecorator(new TextAreaBean(model), model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
+     * Creates a text area bean for the specified string model.
+     * @param model the string model
+     * @param nrColumns the number of columns
+     * @param nrRows the number of rows
+     * @return the text area bean
+     */
+    public Bean createTextAreaBean(StringModel model, int nrColumns, int nrRows) {
+        Bean bean = new ErrorMessageDecorator(new TextAreaBean(model, nrColumns, nrRows), model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
      * Creates a password bean for the specified string model.
      * @param model the string model
      * @param nrColumns the number of columns
