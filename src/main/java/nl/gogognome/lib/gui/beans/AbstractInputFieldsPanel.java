@@ -12,12 +12,7 @@ import javax.swing.JPanel;
 
 import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.swing.WidgetFactory;
-import nl.gogognome.lib.swing.models.BooleanModel;
-import nl.gogognome.lib.swing.models.DateModel;
-import nl.gogognome.lib.swing.models.DoubleModel;
-import nl.gogognome.lib.swing.models.FileModel;
-import nl.gogognome.lib.swing.models.ListModel;
-import nl.gogognome.lib.swing.models.StringModel;
+import nl.gogognome.lib.swing.models.*;
 import nl.gogognome.lib.util.Factory;
 
 /**
@@ -118,6 +113,26 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
      */
     public void addField(String labelId, DoubleModel model, int nrColumns) {
         addVariableSizeField(labelId, beanFactory.createDoubleFieldBean(model, nrColumns).getComponent());
+    }
+
+   /**
+     * Adds a field to edit an integer.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     */
+    public void addField(String labelId, IntegerModel model) {
+        addVariableSizeField(labelId, beanFactory.createIntegerFieldBean(model).getComponent());
+    }
+
+    /**
+     * Adds a field to edit an integer.
+     * @param labelId the id of the label that is put in front of the text field
+     * @param model the model controlling the text field
+     * @param nrColumns the width of the text field as the number of columns.
+     *        The value 0 indicates that the width can be determined by the layout manager.
+     */
+    public void addField(String labelId, IntegerModel model, int nrColumns) {
+        addVariableSizeField(labelId, beanFactory.createIntegerFieldBean(model, nrColumns).getComponent());
     }
 
     /**

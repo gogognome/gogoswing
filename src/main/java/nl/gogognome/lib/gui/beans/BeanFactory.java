@@ -3,12 +3,8 @@ package nl.gogognome.lib.gui.beans;
 import javax.swing.*;
 
 import nl.gogognome.lib.swing.WidgetFactory;
-import nl.gogognome.lib.swing.models.BooleanModel;
-import nl.gogognome.lib.swing.models.DateModel;
-import nl.gogognome.lib.swing.models.DoubleModel;
-import nl.gogognome.lib.swing.models.FileModel;
+import nl.gogognome.lib.swing.models.*;
 import nl.gogognome.lib.swing.models.ListModel;
-import nl.gogognome.lib.swing.models.StringModel;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 
@@ -177,10 +173,33 @@ public class BeanFactory {
      * Creates a double field bean for the specified double model.
      * @param model the double model
      * @param nrColumns the number of columns
-     * @return the text field bean
+     * @return the double field bean
      */
     public Bean createDoubleFieldBean(DoubleModel model, int nrColumns) {
         Bean bean = new ErrorMessageDecorator(new DoubleFieldBean(model, nrColumns), model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
+     * Creates an integer field bean for the specified integer model.
+     * @param model the integer model
+     * @return the integer field bean
+     */
+    public Bean createIntegerFieldBean(IntegerModel model) {
+        Bean bean = new ErrorMessageDecorator(new IntegerFieldBean(model), model, textResource);
+        bean.initBean();
+        return bean;
+    }
+
+    /**
+     * Creates an integer field bean for the specified integer model.
+     * @param model the integer model
+     * @param nrColumns the number of columns
+     * @return the integer field bean
+     */
+    public Bean createIntegerFieldBean(IntegerModel model, int nrColumns) {
+        Bean bean = new ErrorMessageDecorator(new IntegerFieldBean(model, nrColumns), model, textResource);
         bean.initBean();
         return bean;
     }
