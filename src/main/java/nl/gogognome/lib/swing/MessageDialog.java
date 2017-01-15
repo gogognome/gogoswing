@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class implements dialog used to show a message to the user.
+ * @deprecated use {@link nl.gogognome.lib.swing.dialogs.MessageDialog} instead
  */
+@Deprecated
 public class MessageDialog extends DialogWithButtons {
 
     /** Return value from class method if YES is chosen. */
