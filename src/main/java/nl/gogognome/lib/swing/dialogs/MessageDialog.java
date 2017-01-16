@@ -84,6 +84,18 @@ public class MessageDialog {
                 tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
     }
 
+
+    /**
+     * Shows a warning message dialog.
+     * @param resourceId the id of the message
+     * @param args optional arguments to be filled in the placeholders of the message
+     */
+    public void showWarningMessage(String resourceId, Object... args) {
+        TextResource tr = Factory.getInstance(TextResource.class);
+        String message = tr.getString(resourceId, args);
+        showFormattedMessage(parentComponent, textResource.getString("gen.titleWarning"), message, emptyList());
+    }
+
     /**
      * Shows an error message dialog. The message is logged as a warning.
      * @param resourceId the id of the message to be shown to the user.
