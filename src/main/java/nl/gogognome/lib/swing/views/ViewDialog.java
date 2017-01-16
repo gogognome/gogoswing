@@ -49,7 +49,7 @@ public class ViewDialog {
     	Container owner = SwingUtils.getTopLevelContainer(parentComponent);
         if (owner instanceof JDialog) {
             initDialog(new JDialog((JDialog)owner, view.getTitle(), true), view, owner.getBounds());
-        } else  if (owner instanceof JFrame){
+        } else if (owner instanceof JFrame){
             initDialog(new JDialog((JFrame)owner, view.getTitle(), true), view, owner.getBounds());
         } else {
             throw new IllegalArgumentException("The owner must be a JDialog or a JFrame, but was: " + owner.getClass());
