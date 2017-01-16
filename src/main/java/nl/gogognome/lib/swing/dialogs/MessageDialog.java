@@ -1,6 +1,6 @@
 package nl.gogognome.lib.swing.dialogs;
 
-import nl.gogognome.lib.swing.ButtonPanel;
+import nl.gogognome.lib.gui.beans.CollapsiblePanel;
 import nl.gogognome.lib.swing.views.View;
 import nl.gogognome.lib.swing.views.ViewDialog;
 import nl.gogognome.lib.text.TextResource;
@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,20 +168,17 @@ public class MessageDialog {
                 return;
             }
 
-            showDetailsButton = widgetFactory.createButton("gen.detailsButton", this::showDetails);
-            ButtonPanel buttonPanel = new ButtonPanel(SwingConstants.RIGHT);
-            buttonPanel.add(showDetailsButton);
-            add(buttonPanel, BorderLayout.SOUTH);
+            CollapsiblePanel collapsiblePanel = new CollapsiblePanel(textResource.getString("gen.details"), buildDetailsComponent());
+            collapsiblePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+            add(collapsiblePanel, BorderLayout.CENTER);
         }
 
-        private void showDetails() {
-            showDetailsButton.setEnabled(false);
+        private Component buildDetailsComponent() {
             JTextArea textArea = new JTextArea(String.join("\n", details));
             textArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(textArea);
-            scrollPane.setPreferredSize(new Dimension(getViewOwner().getWindow().getWidth() * 3 / 4, getViewOwner().getWindow().getHeight() * 3 / 4));
-            add(scrollPane, BorderLayout.CENTER);
-            getViewOwner().invalidateLayout();
+            scrollPane.setPreferredSize(new Dimension(600, 400));
+            return scrollPane;
         }
 
         @Override
