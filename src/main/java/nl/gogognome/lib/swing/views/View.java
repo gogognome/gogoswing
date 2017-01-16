@@ -2,8 +2,8 @@ package nl.gogognome.lib.swing.views;
 
 import nl.gogognome.lib.gui.Closeable;
 import nl.gogognome.lib.gui.beans.BeanFactory;
-import nl.gogognome.lib.swing.MessageDialog;
 import nl.gogognome.lib.swing.WidgetFactory;
+import nl.gogognome.lib.swing.dialogs.MessageDialog;
 import nl.gogognome.lib.text.TextResource;
 import nl.gogognome.lib.util.Factory;
 import org.slf4j.Logger;
@@ -52,9 +52,17 @@ public abstract class View extends JPanel implements Closeable {
     private ViewOwner viewOwner;
     private JButton defaultButton;
 
-    protected TextResource textResource = Factory.getInstance(TextResource.class);
-    protected WidgetFactory widgetFactory = Factory.getInstance(WidgetFactory.class);
-    protected BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
+    protected TextResource textResource;
+    protected WidgetFactory widgetFactory;
+    protected BeanFactory beanFactory;
+    protected MessageDialog messageDialog;
+
+    protected View() {
+        textResource = Factory.getInstance(TextResource.class);
+        widgetFactory = Factory.getInstance(WidgetFactory.class);
+        beanFactory = Factory.getInstance(BeanFactory.class);
+        messageDialog = new MessageDialog(textResource, this);
+    }
 
     /**
      * Gets the title of the view.
@@ -135,7 +143,7 @@ public abstract class View extends JPanel implements Closeable {
         try {
             onClose();
         } catch (Exception e) {
-            MessageDialog.showErrorMessage(getParent(), e, "gen.titleError");
+            messageDialog.showErrorMessage(e, "gen.titleError");
         }
 
         for (Closeable d : closeables) {
