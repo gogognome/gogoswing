@@ -67,9 +67,8 @@ public class MessageDialog {
     }
 
     private int showConfirmationDialog(int type, String titleId, String messageId, Object...args) {
-        TextResource tr = Factory.getInstance(TextResource.class);
-        String title = tr.getString(titleId);
-        String message = tr.getString(messageId, args);
+        String title = textResource.getString(titleId);
+        String message = textResource.getString(messageId, args);
         return JOptionPane.showConfirmDialog(parentComponent, message, title, type);
     }
 
@@ -79,9 +78,8 @@ public class MessageDialog {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public void showInfoMessage(String resourceId, Object... args) {
-        TextResource tr = Factory.getInstance(TextResource.class);
-        JOptionPane.showMessageDialog(parentComponent, tr.getString(resourceId, args),
-                tr.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(parentComponent, textResource.getString(resourceId, args),
+                textResource.getString("gen.titleMessage"), JOptionPane.INFORMATION_MESSAGE);
     }
 
 
@@ -91,8 +89,7 @@ public class MessageDialog {
      * @param args optional arguments to be filled in the placeholders of the message
      */
     public void showWarningMessage(String resourceId, Object... args) {
-        TextResource tr = Factory.getInstance(TextResource.class);
-        String message = tr.getString(resourceId, args);
+        String message = textResource.getString(resourceId, args);
         showFormattedMessage(parentComponent, textResource.getString("gen.titleWarning"), message, emptyList());
     }
 
