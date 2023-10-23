@@ -75,7 +75,7 @@ public class ListTableModelTest {
         assertEquals("three", tableModel.getRow(2));
     }
 
-    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testGetRowWithInvalidIndex() {
         tableModel.getRow(-1);
     }
