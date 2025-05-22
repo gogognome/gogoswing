@@ -23,7 +23,7 @@ public abstract class AbstractInputFieldsPanel extends JPanel implements Closeab
 	private static final long serialVersionUID = 1L;
 
 	protected List<Component> components = new ArrayList<>();
-    private BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
+    protected BeanFactory beanFactory = Factory.getInstance(BeanFactory.class);
 
     public AbstractInputFieldsPanel() {
         super(new GridBagLayout());

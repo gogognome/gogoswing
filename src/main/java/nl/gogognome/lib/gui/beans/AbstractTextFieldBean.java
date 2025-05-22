@@ -75,7 +75,7 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 					0, 0, 0, 0));
 		} else {
 			// Use default size of the text field
-			setLayout(new FlowLayout(FlowLayout.LEFT));
+			setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			add(textfield);
 		}
     }

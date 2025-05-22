@@ -3,6 +3,7 @@ package nl.gogognome.lib.gui.beans;
 import java.awt.GridBagConstraints;
 
 import nl.gogognome.lib.swing.SwingUtils;
+import nl.gogognome.lib.swing.models.*;
 
 /**
  * This class implements a panel containing a column of input fields.
@@ -19,13 +20,23 @@ public class InputFieldsColumn extends AbstractInputFieldsPanel {
     }
 
 	@Override
+	public void addField(String labelId, DateModel model) {
+		// Use variable size field constraints instead of fixed size field constraints to make it work in
+		// an InputFIeldsColumn.
+		addLabelAndFieldWithConstraints(
+				labelId,
+				beanFactory.createDateSelectionBean(model).getComponent(),
+				getVariableSizeFieldConstraints());
+	}
+
+	@Override
 	protected GridBagConstraints getLabelConstraints() {
 		return SwingUtils.createLabelGBConstraints(0, components.size());
 	}
 
 	@Override
 	protected GridBagConstraints getFixedSizeFieldConstraints() {
-		return SwingUtils.createTextFieldGBConstraints(1, components.size());
+		return SwingUtils.createLabelGBConstraints(1, components.size());
 	}
 
 	@Override
