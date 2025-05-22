@@ -16,14 +16,14 @@ import java.text.ParseException;
  * Base class for a text field bean. Make sure that after instantiation
  * first the method {@link #initBean()} is called.
  */
-public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPanel implements Bean {
+public abstract class AbstractTextFieldBean<M extends AbstractModel<?>> extends JPanel implements Bean {
 
 	protected M model;
     private ModelChangeListener modelChangeListener;
 
     private int horizontalAlignment = JTextField.LEFT;
-    private int nrColumns;
-    private JTextField textfield;
+    private final int nrColumns;
+    private JTextField textField;
     private DocumentListener documentListener;
 
     /**
@@ -47,8 +47,8 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 
     public void setHorizontalAlignment(int horizontalAlignment) {
         this.horizontalAlignment = horizontalAlignment;
-        if (textfield != null) {
-            textfield.setHorizontalAlignment(horizontalAlignment);
+        if (textField != null) {
+            textField.setHorizontalAlignment(horizontalAlignment);
         }
     }
 
@@ -56,8 +56,8 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 	public void initBean() {
         setOpaque(false);
 
-        textfield = createTextField(nrColumns);
-        textfield.setHorizontalAlignment(horizontalAlignment);
+        textField = createTextField(nrColumns);
+        textField.setHorizontalAlignment(horizontalAlignment);
 
         updateTextField();
         parseUserInput();
@@ -65,18 +65,18 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         model.addModelChangeListener(modelChangeListener);
 
         documentListener = new ParseUserInputOnDocumentChangeListener();
-        textfield.getDocument().addDocumentListener(documentListener);
+        textField.getDocument().addDocumentListener(documentListener);
 
 		if (nrColumns == 0) {
 			// Let text field fill all available horizontal space
 			setLayout(new GridBagLayout());
-			add(textfield, SwingUtils.createGBConstraints(0, 0, 1, 1, 1.0, 0.0,
+			add(textField, SwingUtils.createGBConstraints(0, 0, 1, 1, 1.0, 0.0,
 					GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
 					0, 0, 0, 0));
 		} else {
 			// Use default size of the text field
 			setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-			add(textfield);
+			add(textField);
 		}
     }
 
@@ -92,29 +92,29 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     @Override
 	public void close() {
         model.removeModelChangeListener(modelChangeListener);
-        textfield.getDocument().removeDocumentListener(documentListener);
+        textField.getDocument().removeDocumentListener(documentListener);
     }
 
     @Override
 	public void addFocusListener(FocusListener listener) {
-        textfield.addFocusListener(listener);
+        textField.addFocusListener(listener);
     }
 
     @Override
 	public void removeFocusListener(FocusListener listener) {
-        textfield.removeFocusListener(listener);
+        textField.removeFocusListener(listener);
     }
 
     /**
      * Updates the text field with the value of the model.
      */
     private void updateTextField() {
-    	textfield.setEnabled(model.isEnabled());
+    	textField.setEnabled(model.isEnabled());
         String string = getStringFromModel();
         if (string != null) {
-            textfield.setText(string);
+            textField.setText(string);
         } else {
-            textfield.setText("");
+            textField.setText("");
         }
     }
 
@@ -130,13 +130,13 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
      */
     private void parseUserInput() {
         try {
-            parseUserInput(textfield.getText(), modelChangeListener);
-            textfield.setBorder(new LineBorder(Color.GRAY));
+            parseUserInput(textField.getText(), modelChangeListener);
+            textField.setBorder(new LineBorder(Color.GRAY));
         } catch (ParseException e) {
-            if (textfield.getText().length() > 0) {
-                textfield.setBorder(new LineBorder(Color.RED));
+            if (!textField.getText().isEmpty()) {
+                textField.setBorder(new LineBorder(Color.RED));
             } else {
-                textfield.setBorder(new LineBorder(Color.GRAY));
+                textField.setBorder(new LineBorder(Color.GRAY));
             }
         }
     }
@@ -151,12 +151,12 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
 
     @Override
     public void requestFocus() {
-    	textfield.requestFocus();
+    	textField.requestFocus();
     }
 
     @Override
     public boolean requestFocusInWindow() {
-    	return textfield.requestFocusInWindow();
+    	return textField.requestFocusInWindow();
     }
 
     private final class ParseUserInputOnDocumentChangeListener implements DocumentListener {
