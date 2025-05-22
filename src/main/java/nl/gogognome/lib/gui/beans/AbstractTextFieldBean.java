@@ -55,7 +55,6 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
     @Override
 	public void initBean() {
         setOpaque(false);
-        setLayout(new GridBagLayout());
 
         textfield = createTextField(nrColumns);
         textfield.setHorizontalAlignment(horizontalAlignment);
@@ -68,9 +67,17 @@ public abstract class AbstractTextFieldBean<M extends AbstractModel> extends JPa
         documentListener = new ParseUserInputOnDocumentChangeListener();
         textfield.getDocument().addDocumentListener(documentListener);
 
-        add(textfield, SwingUtils.createGBConstraints(0,0, 1, 1, 1.0, 0.0,
-            GridBagConstraints.WEST, nrColumns == 0 ? GridBagConstraints.HORIZONTAL : GridBagConstraints.NONE,
-            0, 0, 0, 0));
+		if (nrColumns == 0) {
+			// Let text field fill all available horizontal space
+			setLayout(new GridBagLayout());
+			add(textfield, SwingUtils.createGBConstraints(0, 0, 1, 1, 1.0, 0.0,
+					GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+					0, 0, 0, 0));
+		} else {
+			// Use default size of the text field
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+			add(textfield);
+		}
     }
 
     protected JTextField createTextField(int nrColumns) {

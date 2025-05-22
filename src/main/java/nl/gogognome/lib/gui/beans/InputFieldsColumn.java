@@ -25,7 +25,7 @@ public class InputFieldsColumn extends AbstractInputFieldsPanel {
 
 	@Override
 	protected GridBagConstraints getFixedSizeFieldConstraints() {
-		return SwingUtils.createLabelGBConstraints(1, components.size());
+		return SwingUtils.createTextFieldGBConstraints(1, components.size());
 	}
 
 	@Override
