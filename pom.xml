@@ -54,7 +54,7 @@
     <dependency>
       <groupId>nl.gogognome</groupId>
       <artifactId>gogolib</artifactId>
-      <version>3.0</version>
+      <version>3.0.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
