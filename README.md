@@ -1,4 +1,5 @@
 # Gogo Swing
+
 Gogo Swing makes writing Swing applications easy.
 
 # Why write a library for building Swing applications?
